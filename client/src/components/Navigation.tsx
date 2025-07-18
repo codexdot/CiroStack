@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 
 interface NavigationProps {
   isDarkMode: boolean;
@@ -8,14 +9,19 @@ interface NavigationProps {
 
 export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [, setLocation] = useLocation();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
   const handleNavClick = (sectionId: string) => {
-    scrollToSection(sectionId);
     setIsMobileMenuOpen(false);
+    if (sectionId === 'blog') {
+      setLocation('/blog');
+    } else {
+      scrollToSection(sectionId);
+    }
   };
 
   return (

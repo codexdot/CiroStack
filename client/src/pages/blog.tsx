@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 
 interface BlogPost {
   id: number;
@@ -16,8 +19,23 @@ interface BlogPost {
   tags: string[];
 }
 
-export default function Blog() {
+export default function BlogPage() {
+  const [, setLocation] = useLocation();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    if (sectionId === 'home') {
+      setLocation('/');
+    } else {
+      setLocation(`/#${sectionId}`);
+    }
+  };
 
   const blogPosts: BlogPost[] = [
     {
@@ -362,6 +380,134 @@ class MultimodalProcessor {
 The future of on-device AI is bright, with exciting developments in hardware, software, and algorithms. As developers, staying informed about these trends will help us build the next generation of intelligent mobile applications.
 
 The key is to balance innovation with practicality, ensuring our applications are both powerful and efficient.`
+    },
+    {
+      id: 4,
+      title: "Advanced Flutter State Management: Riverpod vs BLoC",
+      excerpt: "A detailed comparison of state management approaches in Flutter, exploring when to use Riverpod versus BLoC pattern.",
+      date: "2024-11-28",
+      readTime: "10 min read",
+      category: "Mobile Development",
+      image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      tags: ["Flutter", "Riverpod", "BLoC", "State Management"],
+      content: `# Advanced Flutter State Management: Riverpod vs BLoC
+
+State management is crucial for building maintainable Flutter applications. This article compares two popular approaches: Riverpod and BLoC.
+
+## Understanding the Landscape
+
+### Riverpod Architecture
+
+\`\`\`dart
+final counterProvider = StateNotifierProvider<Counter, int>((ref) {
+  return Counter();
+});
+
+class Counter extends StateNotifier<int> {
+  Counter() : super(0);
+  
+  void increment() => state++;
+  void decrement() => state--;
+}
+\`\`\`
+
+### BLoC Pattern
+
+\`\`\`dart
+class CounterBloc extends Bloc<CounterEvent, int> {
+  CounterBloc() : super(0) {
+    on<Increment>((event, emit) => emit(state + 1));
+    on<Decrement>((event, emit) => emit(state - 1));
+  }
+}
+\`\`\`
+
+## Performance Comparison
+
+### Memory Usage
+- **Riverpod**: Automatic disposal and lazy initialization
+- **BLoC**: Manual lifecycle management required
+
+### Rebuild Optimization
+- **Riverpod**: Granular rebuilds with providers
+- **BLoC**: BlocBuilder and BlocSelector for optimization
+
+## When to Choose Each
+
+### Use Riverpod When:
+- Building new applications
+- Need automatic dependency injection
+- Want compile-time safety
+- Prefer functional programming style
+
+### Use BLoC When:
+- Working with existing BLoC applications
+- Need strict separation of business logic
+- Team is familiar with reactive programming
+- Building large enterprise applications
+
+## Conclusion
+
+Both approaches have their merits. Choose based on your team's expertise and project requirements.`
+    },
+    {
+      id: 5,
+      title: "Implementing Secure Authentication in React Native",
+      excerpt: "Best practices for implementing secure authentication flows in React Native applications with biometric support.",
+      date: "2024-11-20",
+      readTime: "15 min read",
+      category: "Mobile Development",
+      image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+      tags: ["React Native", "Authentication", "Security", "Biometrics"],
+      content: `# Implementing Secure Authentication in React Native
+
+Security is paramount in mobile applications. This guide covers implementing robust authentication with biometric support in React Native.
+
+## Security Fundamentals
+
+### Token Storage
+\`\`\`javascript
+import * as Keychain from 'react-native-keychain';
+
+const storeToken = async (token) => {
+  await Keychain.setInternetCredentials(
+    'myapp',
+    'user',
+    token
+  );
+};
+\`\`\`
+
+### Biometric Authentication
+\`\`\`javascript
+import TouchID from 'react-native-touch-id';
+
+const authenticateWithBiometrics = async () => {
+  const biometryType = await TouchID.isSupported();
+  
+  if (biometryType) {
+    return TouchID.authenticate('Authenticate to access your account');
+  }
+};
+\`\`\`
+
+## Implementation Strategy
+
+1. **Secure Token Storage**: Use Keychain (iOS) and Keystore (Android)
+2. **Certificate Pinning**: Prevent man-in-the-middle attacks
+3. **Biometric Integration**: Support Face ID, Touch ID, and fingerprint
+4. **Session Management**: Implement proper token refresh
+
+## Best Practices
+
+- Always validate tokens server-side
+- Implement proper error handling
+- Use HTTPS everywhere
+- Regular security audits
+
+## Conclusion
+
+Secure authentication requires multiple layers of protection. Follow these patterns for robust mobile security.`
     }
   ];
 
@@ -388,126 +534,150 @@ The key is to balance innovation with practicality, ensuring our applications ar
 
   if (selectedPost) {
     return (
-      <section id="blog" className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-        <div className="mb-8">
-          <button
-            onClick={() => setSelectedPost(null)}
-            className="inline-flex items-center text-[#00f0ff] hover:text-[#00f0ff]/80 transition-colors mb-6"
-          >
-            <i className="fas fa-arrow-left mr-2"></i>
-            Back to Blog
-          </button>
-          
-          <div className="mb-6">
-            <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(selectedPost.category)} mb-4`}>
-              {selectedPost.category}
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{selectedPost.title}</h1>
-            <div className="flex items-center text-slate-400 text-sm">
-              <span>{formatDate(selectedPost.date)}</span>
-              <span className="mx-3">·</span>
-              <span>{selectedPost.readTime}</span>
-            </div>
-          </div>
-          
-          <img 
-            src={selectedPost.image} 
-            alt={selectedPost.title}
-            className="w-full h-64 md:h-80 object-cover rounded-xl mb-8"
-          />
-          
-          <div className="prose prose-slate prose-invert max-w-none">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeHighlight, rehypeRaw]}
-              components={{
-                code: ({ className, children, ...props }) => {
-                  const match = /language-(\w+)/.exec(className || '');
-                  return match ? (
-                    <code className={`${className} block p-4 rounded-lg bg-slate-800/50 border border-slate-700 overflow-x-auto`} {...props}>
-                      {children}
-                    </code>
-                  ) : (
-                    <code className="px-2 py-1 bg-slate-800/50 rounded text-[#00f0ff]" {...props}>
-                      {children}
-                    </code>
-                  );
-                }
-              }}
-            >
-              {selectedPost.content}
-            </ReactMarkdown>
-          </div>
-          
-          <div className="mt-8 pt-8 border-t border-slate-800">
-            <div className="flex flex-wrap gap-2">
-              {selectedPost.tags.map((tag, index) => (
-                <span key={index} className="px-3 py-1 bg-slate-800/50 text-slate-300 rounded-full text-sm">
-                  {tag}
+      <div className="min-h-screen bg-slate-900 text-white">
+        <Navigation 
+          isDarkMode={isDarkMode} 
+          toggleDarkMode={toggleDarkMode}
+          scrollToSection={scrollToSection}
+        />
+        
+        <main className="pt-20">
+          <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <div className="mb-8">
+              <button
+                onClick={() => setSelectedPost(null)}
+                className="inline-flex items-center text-[#00f0ff] hover:text-[#00f0ff]/80 transition-colors mb-6"
+              >
+                <i className="fas fa-arrow-left mr-2"></i>
+                Back to Blog
+              </button>
+              
+              <div className="mb-6">
+                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(selectedPost.category)} mb-4`}>
+                  {selectedPost.category}
                 </span>
-              ))}
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">{selectedPost.title}</h1>
+                <div className="flex items-center text-slate-400 text-sm">
+                  <span>{formatDate(selectedPost.date)}</span>
+                  <span className="mx-3">·</span>
+                  <span>{selectedPost.readTime}</span>
+                </div>
+              </div>
+              
+              <img 
+                src={selectedPost.image} 
+                alt={selectedPost.title}
+                className="w-full h-64 md:h-80 object-cover rounded-xl mb-8"
+              />
+              
+              <div className="prose prose-slate prose-invert max-w-none">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeHighlight, rehypeRaw]}
+                  components={{
+                    code: ({ className, children, ...props }) => {
+                      const match = /language-(\w+)/.exec(className || '');
+                      return match ? (
+                        <code className={`${className} block p-4 rounded-lg bg-slate-800/50 border border-slate-700 overflow-x-auto`} {...props}>
+                          {children}
+                        </code>
+                      ) : (
+                        <code className="px-2 py-1 bg-slate-800/50 rounded text-[#00f0ff]" {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+                  }}
+                >
+                  {selectedPost.content}
+                </ReactMarkdown>
+              </div>
+              
+              <div className="mt-8 pt-8 border-t border-slate-800">
+                <div className="flex flex-wrap gap-2">
+                  {selectedPost.tags.map((tag, index) => (
+                    <span key={index} className="px-3 py-1 bg-slate-800/50 text-slate-300 rounded-full text-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        </main>
+        
+        <Footer scrollToSection={scrollToSection} />
+      </div>
     );
   }
 
   return (
-    <section id="blog" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div className="text-center mb-16">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Latest <span className="gradient-text">Blog Posts</span>
-        </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto">
-          Insights, tutorials, and thoughts on AI, mobile development, and the future of technology.
-        </p>
-      </div>
+    <div className="min-h-screen bg-slate-900 text-white">
+      <Navigation 
+        isDarkMode={isDarkMode} 
+        toggleDarkMode={toggleDarkMode}
+        scrollToSection={scrollToSection}
+      />
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {blogPosts.map((post) => (
-          <article key={post.id} className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-800 card-hover">
-            <div className="relative">
-              <img 
-                src={post.image} 
-                alt={post.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="absolute top-4 left-4">
-                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(post.category)}`}>
-                  {post.category}
-                </span>
-              </div>
-            </div>
-            
-            <div className="p-6">
-              <div className="flex items-center text-slate-400 text-sm mb-3">
-                <span>{formatDate(post.date)}</span>
-                <span className="mx-3">·</span>
-                <span>{post.readTime}</span>
-              </div>
-              
-              <h3 className="text-xl font-bold mb-3 line-clamp-2">{post.title}</h3>
-              <p className="text-slate-400 mb-4 line-clamp-3">{post.excerpt}</p>
-              
-              <div className="flex flex-wrap gap-2 mb-4">
-                {post.tags.slice(0, 3).map((tag, index) => (
-                  <span key={index} className="px-2 py-1 bg-slate-700/50 text-slate-300 rounded text-xs">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              
-              <button
-                onClick={() => setSelectedPost(post)}
-                className="text-[#00f0ff] font-medium inline-flex items-center hover:text-[#00f0ff]/80 transition-colors"
-              >
-                Read More <i className="fas fa-arrow-right ml-2"></i>
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
+      <main className="pt-20">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              CiroStack <span className="gradient-text">Blog</span>
+            </h1>
+            <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+              Insights, tutorials, and thoughts on AI, mobile development, and the future of technology.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogPosts.map((post) => (
+              <article key={post.id} className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-800 card-hover">
+                <div className="relative">
+                  <img 
+                    src={post.image} 
+                    alt={post.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(post.category)}`}>
+                      {post.category}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  <div className="flex items-center text-slate-400 text-sm mb-3">
+                    <span>{formatDate(post.date)}</span>
+                    <span className="mx-3">·</span>
+                    <span>{post.readTime}</span>
+                  </div>
+                  
+                  <h2 className="text-xl font-bold mb-3 line-clamp-2">{post.title}</h2>
+                  <p className="text-slate-400 mb-4 line-clamp-3">{post.excerpt}</p>
+                  
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {post.tags.slice(0, 3).map((tag, index) => (
+                      <span key={index} className="px-2 py-1 bg-slate-700/50 text-slate-300 rounded text-xs">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <button
+                    onClick={() => setSelectedPost(post)}
+                    className="text-[#00f0ff] font-medium inline-flex items-center hover:text-[#00f0ff]/80 transition-colors"
+                  >
+                    Read More <i className="fas fa-arrow-right ml-2"></i>
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
+      
+      <Footer scrollToSection={scrollToSection} />
+    </div>
   );
 }

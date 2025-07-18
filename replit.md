@@ -34,12 +34,12 @@ Preferred communication style: Simple, everyday language.
 ## Key Components
 
 ### Frontend Components
-- **Navigation**: Fixed header with smooth scrolling navigation
+- **Navigation**: Fixed header with smooth scrolling navigation and routing to blog page
 - **Hero Section**: Landing area with gradient design and call-to-action buttons
 - **Projects**: Portfolio showcase with filtering and categorization
 - **AI/ML Section**: Specialized section highlighting AI and machine learning work
 - **Skills**: Technical skills display with experience timeline
-- **Blog**: Modern blog section with full markdown support, syntax highlighting, and content management
+- **Blog**: Separate blog page with full markdown support, syntax highlighting, and content management
 - **Contact**: Contact form with validation and toast notifications
 
 ### Backend Components

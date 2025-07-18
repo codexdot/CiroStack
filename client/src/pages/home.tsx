@@ -4,7 +4,6 @@ import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
 import AIMLSection from "@/components/AIMLSection";
 import Skills from "@/components/Skills";
-import Blog from "@/components/Blog";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
@@ -64,7 +63,6 @@ export default function Home() {
       <Projects />
       <AIMLSection />
       <Skills />
-      <Blog />
       <Contact />
       <Footer scrollToSection={scrollToSection} />
     </div>
