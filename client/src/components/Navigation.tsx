@@ -12,7 +12,7 @@ interface NavigationProps {
 export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location, setLocation] = useLocation();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -138,7 +138,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
                   </div>
                 )}
                 <button
-                  onClick={() => window.location.href = "/api/logout"}
+                  onClick={() => logout()}
                   className="hidden md:flex items-center space-x-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   title="Sign Out"
                 >
@@ -244,7 +244,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
           )}
           {isAuthenticated ? (
             <button
-              onClick={() => window.location.href = "/api/logout"}
+              onClick={() => logout()}
               className="flex items-center space-x-2 w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
             >
               <LogOut className="w-4 h-4" />

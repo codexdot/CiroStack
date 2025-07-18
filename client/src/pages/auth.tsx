@@ -1,11 +1,36 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LogIn, User, Shield } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { LogIn, Eye, EyeOff } from "lucide-react";
 
 export default function AuthPage() {
-  const { user, isLoading, isAuthenticated } = useAuth();
+  const { user, isLoading, isAuthenticated, login, logout, isLoggingIn, loginError } = useAuth();
+  const { toast } = useToast();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login({ username, password });
+      toast({
+        title: "Success",
+        description: "Signed in successfully!",
+      });
+      window.location.href = "/";
+    } catch (error: any) {
+      toast({
+        title: "Sign In Failed",
+        description: error.message || "Invalid credentials",
+        variant: "destructive",
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -21,7 +46,6 @@ export default function AuthPage() {
   if (isAuthenticated && user) {
     return (
       <div className="min-h-screen bg-background">
-        {/* Header */}
         <header className="border-b bg-card">
           <div className="container mx-auto px-4 py-6">
             <div className="flex items-center justify-between">
@@ -29,7 +53,7 @@ export default function AuthPage() {
                 CiroStack Dashboard
               </h1>
               <Button 
-                onClick={() => window.location.href = "/api/logout"}
+                onClick={() => logout()}
                 variant="outline"
                 className="flex items-center gap-2"
               >
@@ -40,82 +64,44 @@ export default function AuthPage() {
           </div>
         </header>
 
-        {/* Main Content */}
         <main className="container mx-auto px-4 py-8">
           <div className="max-w-2xl mx-auto">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Welcome Back!
-                </CardTitle>
+                <CardTitle>Welcome Back!</CardTitle>
                 <CardDescription>
-                  You are successfully signed in to your CiroStack account.
+                  You are successfully signed in. {user.isAdmin && "You have admin access."}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3 p-4 bg-muted rounded-lg">
-                  {user.profileImageUrl ? (
-                    <img 
-                      src={user.profileImageUrl} 
-                      alt="Profile" 
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] flex items-center justify-center">
-                      <User className="w-6 h-6 text-white" />
-                    </div>
-                  )}
-                  <div>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="p-4 bg-muted rounded-lg">
                     <h3 className="font-semibold">
                       {user.firstName || user.lastName 
                         ? `${user.firstName || ''} ${user.lastName || ''}`.trim()
-                        : 'Portfolio User'
+                        : user.username
                       }
                     </h3>
                     <p className="text-sm text-muted-foreground">
                       {user.email || 'No email provided'}
                     </p>
                   </div>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Shield className="w-4 h-4 text-green-500" />
-                        <span className="font-medium">Account Status</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">Active & Verified</p>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <User className="w-4 h-4 text-blue-500" />
-                        <span className="font-medium">Member Since</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'Recently'}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <div className="flex gap-4 pt-4">
-                  <Button 
-                    onClick={() => window.location.href = "/"}
-                    className="bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] hover:opacity-90"
-                  >
-                    View Portfolio
-                  </Button>
-                  <Button 
-                    onClick={() => window.location.href = "/admin"}
-                    variant="outline"
-                  >
-                    Admin Dashboard
-                  </Button>
+                  <div className="flex gap-4">
+                    <Button 
+                      onClick={() => window.location.href = "/"}
+                      className="bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] text-white"
+                    >
+                      Go to Portfolio
+                    </Button>
+                    {user.isAdmin && (
+                      <Button 
+                        onClick={() => window.location.href = "/admin"}
+                        variant="outline"
+                      >
+                        Admin Dashboard
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -126,46 +112,103 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="max-w-md w-full mx-4">
-        <Card>
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] bg-clip-text text-transparent">
-              CiroStack Portfolio
-            </CardTitle>
-            <CardDescription>
-              Sign in to access your portfolio dashboard and admin features
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] flex items-center justify-center">
-                <LogIn className="w-8 h-8 text-white" />
-              </div>
+    <div className="min-h-screen bg-background">
+      <header className="border-b bg-card">
+        <div className="container mx-auto px-4 py-6">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] bg-clip-text text-transparent">
+            CiroStack Dashboard
+          </h1>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8">
+        <div className="max-w-md mx-auto">
+          <Card className="border-2 bg-gradient-to-br from-card/80 to-background/50 backdrop-blur-sm">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] bg-clip-text text-transparent">
+                Sign In
+              </CardTitle>
+              <CardDescription>
+                Access the admin dashboard to manage your portfolio
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter your username"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      required
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+                {loginError && (
+                  <div className="text-sm text-red-500 text-center">
+                    {loginError.message}
+                  </div>
+                )}
+                <Button 
+                  type="submit"
+                  disabled={isLoggingIn}
+                  className="w-full bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] text-white border-0 hover:opacity-90 transition-all"
+                  size="lg"
+                >
+                  {isLoggingIn ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Signing In...
+                    </>
+                  ) : (
+                    <>
+                      <LogIn className="w-4 h-4 mr-2" />
+                      Sign In
+                    </>
+                  )}
+                </Button>
+              </form>
               
-              <div>
-                <h3 className="font-semibold mb-2">Secure Authentication</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Sign in securely using your Replit account to access admin features and manage your portfolio content.
+              <div className="mt-6 pt-6 border-t space-y-4">
+                <p className="text-sm text-muted-foreground text-center">
+                  Demo credentials:
                 </p>
+                <div className="text-xs text-muted-foreground text-center space-y-1">
+                  <p><strong>Username:</strong> admin</p>
+                  <p><strong>Password:</strong> admin123</p>
+                </div>
               </div>
-
-              <Button 
-                onClick={() => window.location.href = "/api/login"}
-                className="w-full bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] hover:opacity-90"
-                size="lg"
-              >
-                <LogIn className="w-4 h-4 mr-2" />
-                Sign In with Replit
-              </Button>
-
-              <p className="text-xs text-muted-foreground">
-                By signing in, you agree to access portfolio management features
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import {
   projects, 
   blogPosts,
   type User, 
-  type UpsertUser,
+  type InsertUser,
   type Project,
   type InsertProject,
   type BlogPost,
@@ -16,9 +16,12 @@ import { eq } from "drizzle-orm";
 // you might need
 
 export interface IStorage {
-  // User operations - mandatory for Replit Auth
-  getUser(id: string): Promise<User | undefined>;
-  upsertUser(user: UpsertUser): Promise<User>;
+  // User operations
+  getUser(id: number): Promise<User | undefined>;
+  getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, updateData: Partial<InsertUser>): Promise<User>;
   
   // Project operations
   getProjects(): Promise<Project[]>;
@@ -36,23 +39,35 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  // User operations - mandatory for Replit Auth
-  async getUser(id: string): Promise<User | undefined> {
+  // User operations
+  async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
 
-  async upsertUser(userData: UpsertUser): Promise<User> {
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(userData: InsertUser): Promise<User> {
     const [user] = await db
       .insert(users)
       .values(userData)
-      .onConflictDoUpdate({
-        target: users.id,
-        set: {
-          ...userData,
-          updatedAt: new Date(),
-        },
-      })
+      .returning();
+    return user;
+  }
+
+  async updateUser(id: number, updateData: Partial<InsertUser>): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ ...updateData, updatedAt: new Date() })
+      .where(eq(users.id, id))
       .returning();
     return user;
   }
@@ -121,25 +136,53 @@ export class DatabaseStorage implements IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private users: Map<number, User>;
+  private currentUserId: number;
 
   // User operations - in-memory implementation for development
-  async getUser(id: string): Promise<User | undefined> {
+  async getUser(id: number): Promise<User | undefined> {
     return this.users.get(id);
   }
 
-  async upsertUser(userData: UpsertUser): Promise<User> {
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.username === username);
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(user => user.email === email);
+  }
+
+  async createUser(userData: InsertUser): Promise<User> {
+    const id = this.currentUserId++;
+    const now = new Date();
     const user: User = {
-      id: userData.id,
+      ...userData,
+      id,
       email: userData.email ?? null,
       firstName: userData.firstName ?? null,
       lastName: userData.lastName ?? null,
       profileImageUrl: userData.profileImageUrl ?? null,
-      createdAt: userData.createdAt || new Date(),
-      updatedAt: new Date(),
+      isAdmin: userData.isAdmin ?? false,
+      createdAt: now,
+      updatedAt: now,
     };
-    this.users.set(userData.id, user);
+    this.users.set(id, user);
     return user;
+  }
+
+  async updateUser(id: number, updateData: Partial<InsertUser>): Promise<User> {
+    const existingUser = this.users.get(id);
+    if (!existingUser) {
+      throw new Error(`User with id ${id} not found`);
+    }
+    
+    const updatedUser: User = {
+      ...existingUser,
+      ...updateData,
+      updatedAt: new Date()
+    };
+    this.users.set(id, updatedUser);
+    return updatedUser;
   }
 
   private projects: Map<number, Project>;
@@ -151,6 +194,7 @@ export class MemStorage implements IStorage {
     this.users = new Map();
     this.projects = new Map();
     this.blogPosts = new Map();
+    this.currentUserId = 1;
     this.currentProjectId = 1;
     this.currentBlogPostId = 1;
     
@@ -158,7 +202,26 @@ export class MemStorage implements IStorage {
     this.initializeSampleData();
   }
 
-  private initializeSampleData() {
+  private async initializeSampleData() {
+    // Create default admin user
+    try {
+      const adminExists = await this.getUserByUsername('admin');
+      if (!adminExists) {
+        const { hashPassword } = await import('./auth');
+        const hashedPassword = await hashPassword('admin123');
+        await this.createUser({
+          username: 'admin',
+          email: 'admin@portfolio.dev',
+          password: hashedPassword,
+          firstName: 'Admin',
+          lastName: 'User',
+          isAdmin: true,
+        });
+      }
+    } catch (error) {
+      console.log('Note: Default admin user creation requires auth module');
+    }
+
     // Sample projects
     const sampleProjects: Project[] = [
       {

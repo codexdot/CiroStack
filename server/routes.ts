@@ -1,19 +1,85 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
-import { insertProjectSchema, insertBlogPostSchema } from "@shared/schema";
+import { authenticateToken, requireAdmin, generateToken, hashPassword, comparePassword } from "./auth";
+import { insertProjectSchema, insertBlogPostSchema, loginSchema, registerSchema } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
-
   // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.post('/api/auth/login', async (req, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      const { username, password } = loginSchema.parse(req.body);
+      
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      const isValidPassword = await comparePassword(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      const token = generateToken({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin || false,
+      });
+
+      const { password: _, ...userWithoutPassword } = user;
+      res.json({ user: userWithoutPassword, token });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(400).json({ message: "Invalid login data" });
+    }
+  });
+
+  app.post('/api/auth/register', async (req, res) => {
+    try {
+      const userData = registerSchema.parse(req.body);
+      
+      // Check if username already exists
+      const existingUser = await storage.getUserByUsername(userData.username);
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+
+      // Check if email already exists
+      if (userData.email) {
+        const existingEmail = await storage.getUserByEmail(userData.email);
+        if (existingEmail) {
+          return res.status(400).json({ message: "Email already exists" });
+        }
+      }
+
+      const hashedPassword = await hashPassword(userData.password);
+      const { confirmPassword, ...userDataWithoutConfirm } = userData;
+      
+      const user = await storage.createUser({
+        ...userDataWithoutConfirm,
+        password: hashedPassword,
+      });
+
+      const token = generateToken({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin || false,
+      });
+
+      const { password: _, ...userWithoutPassword } = user;
+      res.status(201).json({ user: userWithoutPassword, token });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(400).json({ message: "Invalid registration data" });
+    }
+  });
+
+  app.get('/api/auth/user', authenticateToken, async (req: any, res) => {
+    try {
+      const { password: _, ...userWithoutPassword } = req.user;
+      res.json(userWithoutPassword);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -55,7 +121,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/projects", async (req, res) => {
+  app.post("/api/projects", authenticateToken, requireAdmin, async (req, res) => {
     try {
       const validatedData = insertProjectSchema.parse(req.body);
       const project = await storage.createProject(validatedData);
@@ -66,7 +132,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/projects/:id", async (req, res) => {
+  app.put("/api/projects/:id", authenticateToken, requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertProjectSchema.partial().parse(req.body);
@@ -78,7 +144,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/projects/:id", async (req, res) => {
+  app.delete("/api/projects/:id", authenticateToken, requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteProject(id);
@@ -114,7 +180,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/blog-posts", async (req, res) => {
+  app.post("/api/blog-posts", authenticateToken, requireAdmin, async (req, res) => {
     try {
       const validatedData = insertBlogPostSchema.parse(req.body);
       const blogPost = await storage.createBlogPost(validatedData);
@@ -125,7 +191,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/blog-posts/:id", async (req, res) => {
+  app.put("/api/blog-posts/:id", authenticateToken, requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertBlogPostSchema.partial().parse(req.body);
@@ -137,7 +203,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/blog-posts/:id", async (req, res) => {
+  app.delete("/api/blog-posts/:id", authenticateToken, requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       await storage.deleteBlogPost(id);
