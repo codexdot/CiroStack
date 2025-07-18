@@ -106,12 +106,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Try Supabase first, fallback to local auth
       try {
+        console.log(`🔐 Attempting Supabase signin for: ${email}`);
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
 
+        console.log('Supabase signin result:', { 
+          hasUser: !!authData?.user, 
+          error: authError?.message,
+          userId: authData?.user?.id,
+          email: authData?.user?.email 
+        });
+
         if (!authError && authData.user) {
+          console.log('✅ Supabase authentication successful');
           // Supabase signin successful
           const userMetadata = authData.user.user_metadata || {};
           const userData = {
@@ -133,7 +142,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
       } catch (supabaseError) {
-        console.log('Supabase signin failed, trying local authentication');
+        console.log('❌ Supabase signin error:', supabaseError.message);
+        console.log('⚠️  Falling back to local authentication');
       }
 
       // Fallback to local authentication
