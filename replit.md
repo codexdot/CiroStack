@@ -21,6 +21,7 @@ Preferred communication style: Simple, everyday language.
 - Enhanced light mode with sophisticated blue-toned color palette and clean white container backgrounds
 - Updated all components to use theme-aware CSS variables for consistent styling across themes
 - Set dark mode as default theme with localStorage persistence and automatic theme detection
+- Removed yellow focus outline from theme toggle button for better user experience
 
 ## System Architecture
 

@@ -81,7 +81,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
             <div className="flex items-center">
               <button
                 onClick={toggleDarkMode}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-muted hover:bg-muted/80 transition-colors"
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-muted hover:bg-muted/80 transition-colors focus:outline-none focus-visible:outline-none"
                 aria-label="Toggle theme"
               >
                 {isDarkMode ? (
