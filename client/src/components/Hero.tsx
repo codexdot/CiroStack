@@ -4,7 +4,7 @@ interface HeroProps {
 
 export default function Hero({ scrollToSection }: HeroProps) {
   return (
-    <section id="home" className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="home" className="pt-32 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="hero-content flex flex-col md:flex-row items-center">
         <div className="hero-text md:w-1/2">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
