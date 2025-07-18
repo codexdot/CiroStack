@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useAuth } from "@/hooks/useAuth";
+import { LogIn, LogOut, User } from "lucide-react";
 
 interface NavigationProps {
   isDarkMode: boolean;
@@ -10,6 +12,7 @@ interface NavigationProps {
 export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection }: NavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location, setLocation] = useLocation();
+  const { user, isAuthenticated } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -29,6 +32,10 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
     } else if (sectionId === 'admin') {
       setLocation('/admin');
       // Scroll to top when navigating to admin page
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+    } else if (sectionId === 'auth') {
+      setLocation('/auth');
+      // Scroll to top when navigating to auth page
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else if (sectionId === 'home') {
       // Clear any saved scroll position for home page
@@ -105,15 +112,49 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
             >
               Contact
             </button>
-            <button 
-              onClick={() => handleNavClick('admin')} 
-              className="nav-link text-foreground hover:text-[#00f0ff] transition-colors"
-            >
-              Admin
-            </button>
+            {isAuthenticated && (
+              <button 
+                onClick={() => handleNavClick('admin')} 
+                className="nav-link text-foreground hover:text-[#00f0ff] transition-colors"
+              >
+                Admin
+              </button>
+            )}
           </div>
           
           <div className="flex items-center space-x-4">
+            {/* Auth Button */}
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-2">
+                {user?.profileImageUrl ? (
+                  <img 
+                    src={user.profileImageUrl} 
+                    alt="Profile" 
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] flex items-center justify-center">
+                    <User className="w-4 h-4 text-white" />
+                  </div>
+                )}
+                <button
+                  onClick={() => window.location.href = "/api/logout"}
+                  className="hidden md:flex items-center space-x-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => handleNavClick('auth')}
+                className="hidden md:flex items-center space-x-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Sign In</span>
+              </button>
+            )}
             {/* Theme Toggle */}
             <div className="flex items-center">
               <button
@@ -193,12 +234,31 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
           >
             Contact
           </button>
-          <button 
-            onClick={() => handleNavClick('admin')} 
-            className="block w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
-          >
-            Admin
-          </button>
+          {isAuthenticated && (
+            <button 
+              onClick={() => handleNavClick('admin')} 
+              className="block w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
+            >
+              Admin
+            </button>
+          )}
+          {isAuthenticated ? (
+            <button
+              onClick={() => window.location.href = "/api/logout"}
+              className="flex items-center space-x-2 w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Sign Out</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => handleNavClick('auth')}
+              className="flex items-center space-x-2 w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Sign In</span>
+            </button>
+          )}
         </div>
       </div>
     </nav>
