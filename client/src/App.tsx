@@ -7,11 +7,8 @@ import Home from "@/pages/home";
 import Blog from "@/pages/blog";
 import Projects from "@/pages/projects";
 import ProtectedAdminPage from "@/pages/protected-admin";
-import AuthPage from "@/pages/auth";
-import Auth from "@/pages/Auth";
 import Signup from "@/pages/Signup";
 import AuthCallback from "@/pages/AuthCallback";
-import TestAuth from "@/pages/TestAuth";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,11 +18,8 @@ function Router() {
       <Route path="/blog" component={Blog} />
       <Route path="/projects" component={Projects} />
       <Route path="/admin" component={ProtectedAdminPage} />
-      <Route path="/auth" component={AuthPage} />
-      <Route path="/login" component={Auth} />
       <Route path="/signup" component={Signup} />
       <Route path="/auth/callback" component={AuthCallback} />
-      <Route path="/test-auth" component={TestAuth} />
       <Route component={NotFound} />
     </Switch>
   );

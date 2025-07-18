@@ -33,7 +33,10 @@ export const getSupabase = async () => {
 };
 
 // For backward compatibility, create a simple client with fallback
-export const supabase = createClient(
-  'https://placeholder.supabase.co', 
-  'placeholder-key'
-);
+// Only create if environment variables are available
+export const supabase = import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY 
+  ? createClient(
+      import.meta.env.VITE_SUPABASE_URL, 
+      import.meta.env.VITE_SUPABASE_ANON_KEY
+    )
+  : null;
