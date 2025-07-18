@@ -97,7 +97,7 @@ export default function Skills() {
               <div className="bg-card rounded-xl p-6 border border-border">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="font-bold">{job.title}</h4>
-                  <span className={`text-sm px-2 py-1 rounded-full ${job.badgeColor}`}>
+                  <span className={`text-sm px-2 py-1 rounded-full whitespace-nowrap ${job.badgeColor}`}>
                     {job.duration}
                   </span>
                 </div>
