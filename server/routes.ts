@@ -6,9 +6,13 @@ import { insertProjectSchema, insertBlogPostSchema, loginSchema, registerSchema 
 import { supabase } from "./supabase";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Supabase Auth routes
+  // Supabase Auth routes (only available if Supabase is configured)
   app.post('/api/auth/signup', async (req, res) => {
     try {
+      if (!supabase) {
+        return res.status(503).json({ message: "Supabase authentication not available" });
+      }
+
       const { email, password, username, firstName, lastName } = req.body;
       
       if (!email || !password || !username) {
@@ -63,6 +67,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/auth/signin', async (req, res) => {
     try {
+      if (!supabase) {
+        return res.status(503).json({ message: "Supabase authentication not available" });
+      }
+
       const { email, password } = req.body;
       
       if (!email || !password) {
@@ -110,6 +118,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/auth/signout', async (req, res) => {
     try {
+      if (!supabase) {
+        return res.status(503).json({ message: "Supabase authentication not available" });
+      }
+
       const { error } = await supabase.auth.signOut();
       if (error) {
         return res.status(400).json({ message: error.message });
