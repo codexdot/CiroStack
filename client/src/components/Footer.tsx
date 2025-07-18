@@ -1,8 +1,12 @@
+import { useLocation } from "wouter";
+
 interface FooterProps {
   scrollToSection: (sectionId: string) => void;
 }
 
 export default function Footer({ scrollToSection }: FooterProps) {
+  const [, setLocation] = useLocation();
+  
   const navLinks = [
     { label: "Home", section: "home" },
     { label: "Projects", section: "projects" },
@@ -11,6 +15,14 @@ export default function Footer({ scrollToSection }: FooterProps) {
     { label: "Blog", section: "blog" },
     { label: "Contact", section: "contact" }
   ];
+
+  const handleNavClick = (sectionId: string) => {
+    if (sectionId === 'blog') {
+      setLocation('/blog');
+    } else {
+      scrollToSection(sectionId);
+    }
+  };
 
   return (
     <footer className="border-t border-slate-800 bg-slate-900/50">
@@ -28,7 +40,7 @@ export default function Footer({ scrollToSection }: FooterProps) {
               {navLinks.map((link, index) => (
                 <button
                   key={index}
-                  onClick={() => scrollToSection(link.section)}
+                  onClick={() => handleNavClick(link.section)}
                   className="text-slate-400 hover:text-[#00f0ff] transition-colors text-sm"
                 >
                   {link.label}
