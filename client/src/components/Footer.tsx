@@ -40,12 +40,16 @@ export default function Footer({ scrollToSection }: FooterProps) {
     } else {
       // For homepage sections (ai, skills, contact), always update URL with hash
       if (location === '/') {
-        // Already on homepage, update URL and scroll to section
-        setLocation(`/#${sectionId}`);
+        // Already on homepage, update URL using browser history and scroll to section
+        window.history.pushState(null, '', `/#${sectionId}`);
         scrollToSection(sectionId);
       } else {
         // Navigate to homepage with hash for section
-        setLocation(`/#${sectionId}`);
+        setLocation('/');
+        // Update URL after navigation
+        setTimeout(() => {
+          window.history.pushState(null, '', `/#${sectionId}`);
+        }, 50);
       }
     }
   };
