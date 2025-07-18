@@ -417,7 +417,7 @@ export default function AdminPage({}: AdminPageProps) {
 
         {/* Project/Blog Post Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
             <DialogHeader>
               <DialogTitle>
                 {editingProject 
@@ -436,7 +436,7 @@ export default function AdminPage({}: AdminPageProps) {
             </DialogHeader>
 
             {activeTab === "projects" ? (
-              <form onSubmit={handleProjectSubmit} className="space-y-4">
+              <form onSubmit={handleProjectSubmit} className="space-y-4 w-full overflow-hidden">
                 <div>
                   <Label htmlFor="title">Title</Label>
                   <Input
@@ -453,6 +453,8 @@ export default function AdminPage({}: AdminPageProps) {
                     id="description"
                     name="description"
                     defaultValue={editingProject?.description || ""}
+                    className="w-full resize-none break-words whitespace-pre-wrap"
+                    style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                     required
                   />
                 </div>
@@ -535,7 +537,7 @@ export default function AdminPage({}: AdminPageProps) {
                 </DialogFooter>
               </form>
             ) : (
-              <form onSubmit={handleBlogPostSubmit} className="space-y-4">
+              <form onSubmit={handleBlogPostSubmit} className="space-y-4 w-full overflow-hidden">
                 <div>
                   <Label htmlFor="title">Title</Label>
                   <Input
@@ -552,6 +554,8 @@ export default function AdminPage({}: AdminPageProps) {
                     id="excerpt"
                     name="excerpt"
                     defaultValue={editingBlogPost?.excerpt || ""}
+                    className="w-full resize-none break-words whitespace-pre-wrap"
+                    style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                     required
                   />
                 </div>
@@ -563,6 +567,8 @@ export default function AdminPage({}: AdminPageProps) {
                     name="content"
                     defaultValue={editingBlogPost?.content || ""}
                     rows={10}
+                    className="w-full resize-none break-words whitespace-pre-wrap"
+                    style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
                     required
                   />
                 </div>
