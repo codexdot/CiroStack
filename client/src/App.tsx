@@ -7,6 +7,7 @@ import WhatsAppButton from "@/components/WhatsAppButton";
 import Home from "@/pages/home";
 import Blog from "@/pages/blog";
 import Projects from "@/pages/projects";
+import Services from "@/pages/services";
 import ProtectedAdminPage from "@/pages/protected-admin";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/blog" component={Blog} />
       <Route path="/projects" component={Projects} />
+      <Route path="/services" component={Services} />
       <Route path="/admin" component={ProtectedAdminPage} />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />

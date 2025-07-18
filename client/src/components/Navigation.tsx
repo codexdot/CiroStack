@@ -29,6 +29,10 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
       setLocation('/projects');
       // Scroll to top when navigating to projects page
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+    } else if (sectionId === 'services') {
+      setLocation('/services');
+      // Scroll to top when navigating to services page
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else if (sectionId === 'admin') {
       setLocation('/admin');
       // Scroll to top when navigating to admin page
@@ -98,6 +102,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               className="nav-link text-foreground hover:text-[#00f0ff] transition-colors"
             >
               Projects
+            </button>
+            <button 
+              onClick={() => handleNavClick('services')} 
+              className="nav-link text-foreground hover:text-[#00f0ff] transition-colors"
+            >
+              Services
             </button>
             <button 
               onClick={() => handleNavClick('ai')} 
@@ -220,6 +230,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
             className="block w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
           >
             Projects
+          </button>
+          <button 
+            onClick={() => handleNavClick('services')} 
+            className="block w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
+          >
+            Services
           </button>
           <button 
             onClick={() => handleNavClick('ai')} 
