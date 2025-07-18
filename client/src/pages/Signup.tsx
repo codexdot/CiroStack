@@ -28,7 +28,7 @@ export default function Signup() {
     try {
       const response = await apiRequest('/api/auth/signup', {
         method: 'POST',
-        body: JSON.stringify(signUpData),
+        body: signUpData,
       });
 
       if (response.token) {

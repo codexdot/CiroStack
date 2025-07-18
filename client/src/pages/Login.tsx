@@ -25,7 +25,7 @@ export default function Login() {
     try {
       const response = await apiRequest('/api/auth/signin', {
         method: 'POST',
-        body: JSON.stringify(loginData),
+        body: loginData,
       });
 
       if (response.token) {
