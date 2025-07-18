@@ -5,11 +5,11 @@
 :root {
   --background: hsl(210, 20%, 98%);
   --foreground: hsl(210, 40%, 8%);
-  --muted: hsl(210, 40%, 94%);
+  --muted: hsl(210, 40%, 96%);
   --muted-foreground: hsl(210, 15%, 44%);
-  --popover: hsl(210, 20%, 98%);
+  --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(210, 40%, 8%);
-  --card: hsl(210, 20%, 98%);
+  --card: hsl(0, 0%, 100%);
   --card-foreground: hsl(210, 40%, 8%);
   --border: hsl(210, 25%, 87%);
   --input: hsl(210, 25%, 87%);
@@ -17,7 +17,7 @@
   --primary-foreground: hsl(210, 100%, 99%);
   --secondary: hsl(300, 100%, 50%);
   --secondary-foreground: hsl(210, 40%, 8%);
-  --accent: hsl(210, 40%, 94%);
+  --accent: hsl(210, 40%, 96%);
   --accent-foreground: hsl(210, 40%, 8%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
@@ -135,13 +135,13 @@
   
   /* Light mode specific improvements */
   .light .card-hover {
-    background: hsl(210, 40%, 97%);
+    background: hsl(0, 0%, 100%);
     border: 1px solid hsl(210, 20%, 90%);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
   
   .light .mobile-menu {
-    background: hsl(210, 40%, 97%);
+    background: hsl(0, 0%, 100%);
     border-top: 1px solid hsl(210, 20%, 90%);
   }
   
@@ -155,14 +155,14 @@
   
   /* Light mode navigation improvements */
   .light nav {
-    background: hsl(210, 40%, 97%);
+    background: hsl(0, 0%, 100%);
     border-bottom: 1px solid hsl(210, 20%, 90%);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
   
   /* Light mode section backgrounds */
   .light section {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.8);
   }
   
   .skill-pill:hover {
