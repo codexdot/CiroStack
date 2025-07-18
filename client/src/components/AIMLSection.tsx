@@ -51,8 +51,7 @@ export default function AIMLSection() {
                 </div>
               </div>
               <div className="code-snippet p-4 rounded-lg mb-4 overflow-x-auto">
-                <pre className="text-sm text-slate-300 leading-relaxed">
-<span className="text-[#00f0ff]">class</span> <span className="text-[#ff00f0]">MobileViT</span>(nn.Module):
+                <pre className="text-sm text-slate-300"><span className="text-[#00f0ff]">class</span> <span className="text-[#ff00f0]">MobileViT</span>(nn.Module):
     <span className="text-[#00f0ff]">def</span> <span className="text-[#ff00f0]">__init__</span>(self, image_size=256, patch_size=16, ...):
         super().__init__()
         self.patch_embed = PatchEmbed(image_size, patch_size)
@@ -64,8 +63,7 @@ export default function AIMLSection() {
         x = self.patch_embed(x)
         x = self.transformer(x)
         <span className="text-slate-500"># Efficient projection</span>
-        <span className="text-[#00f0ff]">return</span> self.conv_proj(x)
-                </pre>
+        <span className="text-[#00f0ff]">return</span> self.conv_proj(x)</pre>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex space-x-2">
@@ -90,8 +88,7 @@ export default function AIMLSection() {
                 </div>
               </div>
               <div className="code-snippet p-4 rounded-lg mb-4 overflow-x-auto">
-                <pre className="text-sm text-slate-300 leading-relaxed">
-<span className="text-[#00f0ff]">def</span> <span className="text-[#ff00f0]">distill_bert</span>(teacher, student, dataloader):
+                <pre className="text-sm text-slate-300"><span className="text-[#00f0ff]">def</span> <span className="text-[#ff00f0]">distill_bert</span>(teacher, student, dataloader):
     <span className="text-slate-500"># Knowledge distillation loop</span>
     <span className="text-[#00f0ff]">for</span> batch <span className="text-[#00f0ff]">in</span> dataloader:
         <span className="text-[#00f0ff]">with</span> torch.no_grad():
@@ -102,8 +99,7 @@ export default function AIMLSection() {
         loss.backward()
         optimizer.step()
         
-    <span className="text-[#00f0ff]">return</span> student
-                </pre>
+    <span className="text-[#00f0ff]">return</span> student</pre>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex space-x-2">

@@ -145,16 +145,17 @@
   
   .code-snippet {
     font-family: 'Courier New', monospace;
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(15, 23, 42, 0.7);
     border-left: 3px solid #00f0ff;
-    line-height: 1.6;
+    overflow-x: auto;
   }
   
   .code-snippet pre {
     font-size: 0.875rem;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-wrap: break-word;
+    line-height: 1.5;
+    white-space: pre;
+    overflow-x: auto;
+    min-width: fit-content;
   }
   
   .timeline-item::before {
