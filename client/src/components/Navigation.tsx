@@ -76,7 +76,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               className="flex items-center space-x-3 text-2xl font-bold gradient-text hover:opacity-80 transition-opacity"
             >
               <img 
-                src="/logosm.png" 
+                src="/logotrans.png" 
                 alt="CiroStack Logo" 
                 className="w-12 h-12 object-contain"
               />
