@@ -1,3 +1,5 @@
+import { Link } from "wouter";
+
 export default function Projects() {
   const projects = [
     {
@@ -80,9 +82,9 @@ export default function Projects() {
       </div>
       
       <div className="text-center mt-12">
-        <button className="inline-flex items-center text-[#00f0ff] font-medium hover:text-[#00f0ff]/80 transition-colors">
+        <Link href="/projects" className="inline-flex items-center text-[#00f0ff] font-medium hover:text-[#00f0ff]/80 transition-colors">
           View All Projects <i className="fas fa-arrow-right ml-2"></i>
-        </button>
+        </Link>
       </div>
     </section>
   );

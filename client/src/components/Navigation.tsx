@@ -19,6 +19,8 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
     setIsMobileMenuOpen(false);
     if (sectionId === 'blog') {
       setLocation('/blog');
+    } else if (sectionId === 'projects') {
+      setLocation('/projects');
     } else {
       scrollToSection(sectionId);
     }
