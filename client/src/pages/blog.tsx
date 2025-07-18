@@ -542,16 +542,18 @@ Secure authentication requires multiple layers of protection. Follow these patte
         />
         
         <main className="pt-20">
-          <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+          <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+            <button
+              onClick={() => setSelectedPost(null)}
+              className="inline-flex items-center text-[#00f0ff] hover:text-[#00f0ff]/80 transition-colors mb-8"
+            >
+              <i className="fas fa-arrow-left mr-2"></i>
+              Back to Blog
+            </button>
+          </section>
+          
+          <section className="pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
             <div className="mb-8">
-              <button
-                onClick={() => setSelectedPost(null)}
-                className="inline-flex items-center text-[#00f0ff] hover:text-[#00f0ff]/80 transition-colors mb-6"
-              >
-                <i className="fas fa-arrow-left mr-2"></i>
-                Back to Blog
-              </button>
-              
               <div className="mb-6">
                 <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(selectedPost.category)} mb-4`}>
                   {selectedPost.category}
