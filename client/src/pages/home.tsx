@@ -24,6 +24,9 @@ export default function Home() {
         setTimeout(() => {
           scrollToSection(hash);
         }, 100);
+      } else {
+        // No hash, scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 

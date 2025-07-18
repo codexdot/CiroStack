@@ -26,6 +26,7 @@ Preferred communication style: Simple, everyday language.
 - Implemented cross-page navigation: clicking homepage sections from other pages navigates home and scrolls to section
 - Added hash-based navigation support for deep linking to specific homepage sections
 - Removed yellow focus outline from theme toggle button for better user experience
+- Added scroll-to-top functionality for direct page navigation (home, projects, blog pages automatically scroll to top)
 
 ## System Architecture
 

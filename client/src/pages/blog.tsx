@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
 import { useTheme } from "@/hooks/use-theme";
@@ -30,6 +30,13 @@ export default function BlogPage() {
   const blogListKey = '/blog';
   const blogPostKey = selectedPost ? `/blog/post/${selectedPost.id}` : '/blog';
   const { saveScrollPosition, restoreScrollPosition } = useScrollPosition(blogPostKey);
+
+  // Scroll to top when blog page loads initially (not when navigating between posts)
+  useEffect(() => {
+    if (!selectedPost) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [selectedPost]);
 
   // Handle blog post selection with scroll management
   const handlePostSelect = (post: BlogPost) => {

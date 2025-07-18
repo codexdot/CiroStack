@@ -19,10 +19,16 @@ export default function Footer({ scrollToSection }: FooterProps) {
   const handleNavClick = (sectionId: string) => {
     if (sectionId === 'blog') {
       setLocation('/blog');
+      // Scroll to top when navigating to blog page
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else if (sectionId === 'projects') {
       setLocation('/projects');
+      // Scroll to top when navigating to projects page
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else if (sectionId === 'home') {
       setLocation('/');
+      // Scroll to top when navigating to home page
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else {
       // For homepage sections (ai, skills, contact), check if we're already on homepage
       if (location === '/') {
