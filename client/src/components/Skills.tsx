@@ -1,6 +1,13 @@
 export default function Skills() {
   const skillCategories = [
     {
+      title: "Web Development",
+      icon: "fas fa-code",
+      iconColor: "text-[#ff00f0]",
+      bgColor: "bg-[#ff00f0]/10",
+      skills: ["React", "TypeScript", "Next.js", "Node.js", "Tailwind CSS", "Express.js", "PostgreSQL", "MongoDB"]
+    },
+    {
       title: "Mobile Development",
       icon: "fas fa-mobile-alt",
       iconColor: "text-[#00f0ff]",
@@ -54,7 +61,7 @@ export default function Skills() {
           Skills & <span className="gradient-text">Technologies</span>
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto">
-          My technical expertise spans across mobile development, AI/ML frameworks, and cloud technologies.
+          My technical expertise spans across web development, mobile development, AI/ML frameworks, and cloud technologies.
         </p>
       </div>
       
