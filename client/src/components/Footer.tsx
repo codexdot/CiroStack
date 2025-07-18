@@ -12,29 +12,31 @@ export default function Footer({ scrollToSection }: FooterProps) {
   ];
 
   return (
-    <footer className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800">
-      <div className="flex flex-col md:flex-row justify-between items-center">
-        <div className="mb-6 md:mb-0">
-          <a href="#" className="text-2xl font-bold gradient-text">
-            CIRO<span className="text-white">STACK</span>
-          </a>
-          <p className="text-slate-400 text-sm mt-2">Building intelligent mobile experiences.</p>
-        </div>
-        
-        <div className="flex flex-col items-center md:items-end">
-          <div className="flex space-x-6 mb-4">
-            {navLinks.map((link, index) => (
-              <button
-                key={index}
-                onClick={() => scrollToSection(link.section)}
-                className="text-slate-400 hover:text-[#00f0ff] transition-colors"
-              >
-                {link.label}
-              </button>
-            ))}
+    <footer className="border-t border-slate-800 bg-slate-900/50">
+      <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+          <div className="flex-1">
+            <a href="#" className="text-2xl font-bold gradient-text inline-block">
+              CIRO<span className="text-white">STACK</span>
+            </a>
+            <p className="text-slate-400 text-sm mt-2 max-w-md">Building intelligent mobile experiences with cutting-edge AI/ML technology.</p>
           </div>
           
-          <p className="text-slate-500 text-sm">© 2025 CiroStack. All rights reserved.</p>
+          <div className="flex-1 flex flex-col items-start md:items-end">
+            <div className="flex flex-wrap gap-x-6 gap-y-2 mb-4">
+              {navLinks.map((link, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollToSection(link.section)}
+                  className="text-slate-400 hover:text-[#00f0ff] transition-colors text-sm"
+                >
+                  {link.label}
+                </button>
+              ))}
+            </div>
+            
+            <p className="text-slate-500 text-sm">© 2025 CiroStack. All rights reserved.</p>
+          </div>
         </div>
       </div>
     </footer>
