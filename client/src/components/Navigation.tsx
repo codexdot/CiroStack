@@ -37,9 +37,9 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
       setLocation('/auth');
       // Scroll to top when navigating to auth page
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
-    } else if (sectionId === 'login') {
-      setLocation('/login');
-      // Scroll to top when navigating to login page
+    } else if (sectionId === 'signup') {
+      setLocation('/signup');
+      // Scroll to top when navigating to signup page
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else if (sectionId === 'home') {
       // Clear any saved scroll position for home page
@@ -152,7 +152,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               </div>
             ) : (
               <button
-                onClick={() => handleNavClick('login')}
+                onClick={() => handleNavClick('signup')}
                 className="hidden md:flex items-center space-x-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 <LogIn className="w-4 h-4" />
@@ -256,7 +256,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
             </button>
           ) : (
             <button
-              onClick={() => handleNavClick('auth')}
+              onClick={() => handleNavClick('signup')}
               className="flex items-center space-x-2 w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
             >
               <LogIn className="w-4 h-4" />
