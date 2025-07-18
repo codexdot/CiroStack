@@ -271,14 +271,14 @@ export default function AdminPage({}: AdminPageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground max-w-full overflow-x-hidden">
       <Navigation 
         isDarkMode={isDarkMode} 
         toggleDarkMode={toggleTheme}
         scrollToSection={scrollToSection}
       />
       
-      <div className="pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full box-border">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold mb-4">
             Admin <span className="gradient-text">Dashboard</span>
@@ -288,7 +288,7 @@ export default function AdminPage({}: AdminPageProps) {
           </p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full max-w-full overflow-x-hidden">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="blog">Blog Posts</TabsTrigger>
@@ -306,9 +306,9 @@ export default function AdminPage({}: AdminPageProps) {
             {projectsLoading ? (
               <p>Loading projects...</p>
             ) : (
-              <div className="grid gap-6">
+              <div className="grid gap-6 w-full max-w-full">
                 {projects.map((project: Project) => (
-                  <Card key={project.id}>
+                  <Card key={project.id} className="w-full max-w-full overflow-hidden">
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <div>
@@ -338,8 +338,8 @@ export default function AdminPage({}: AdminPageProps) {
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-slate-400 mb-4">{project.description}</p>
+                    <CardContent className="w-full max-w-full overflow-hidden">
+                      <p className="text-slate-400 mb-4 break-words">{project.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {project.technologies.map((tech, index) => (
                           <Badge key={index} variant="secondary">{tech}</Badge>
@@ -364,9 +364,9 @@ export default function AdminPage({}: AdminPageProps) {
             {blogPostsLoading ? (
               <p>Loading blog posts...</p>
             ) : (
-              <div className="grid gap-6">
+              <div className="grid gap-6 w-full max-w-full">
                 {blogPosts.map((post: BlogPost) => (
-                  <Card key={post.id}>
+                  <Card key={post.id} className="w-full max-w-full overflow-hidden">
                     <CardHeader>
                       <div className="flex justify-between items-start">
                         <div>
@@ -399,8 +399,8 @@ export default function AdminPage({}: AdminPageProps) {
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-slate-400 mb-4">{post.excerpt}</p>
+                    <CardContent className="w-full max-w-full overflow-hidden">
+                      <p className="text-slate-400 mb-4 break-words">{post.excerpt}</p>
                       <div className="flex flex-wrap gap-2 mb-2">
                         {post.tags.map((tag, index) => (
                           <Badge key={index} variant="secondary">{tag}</Badge>
@@ -417,7 +417,7 @@ export default function AdminPage({}: AdminPageProps) {
 
         {/* Project/Blog Post Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
+          <DialogContent className="max-w-2xl w-[95vw] max-h-[90vh] overflow-y-auto overflow-x-hidden">
             <DialogHeader>
               <DialogTitle>
                 {editingProject 
