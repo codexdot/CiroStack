@@ -74,9 +74,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
             >
               Contact
             </button>
-            
-            <div className="flex items-center ml-4">
-              <span className="mr-2 text-sm text-muted-foreground">Dark</span>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <div className="flex items-center">
+              <span className="mr-2 text-sm text-muted-foreground hidden sm:inline">Dark</span>
               <div className="relative inline-block w-12 mr-2 align-middle select-none">
                 <input 
                   type="checkbox" 
@@ -93,19 +96,20 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
                   className="block overflow-hidden h-6 rounded-full bg-muted cursor-pointer"
                 />
               </div>
-              <span className="text-sm text-muted-foreground">Light</span>
+              <span className="text-sm text-muted-foreground hidden sm:inline">Light</span>
             </div>
-          </div>
-          
-          <div className="md:hidden flex items-center">
-            <button 
-              onClick={toggleMobileMenu}
-              className="text-foreground focus:outline-none"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+            
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button 
+                onClick={toggleMobileMenu}
+                className="text-foreground focus:outline-none"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
