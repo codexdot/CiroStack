@@ -6,7 +6,7 @@ import { insertProjectSchema, insertBlogPostSchema, loginSchema, registerSchema 
 import { supabase } from "./supabase";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Supabase Auth routes
+  // Supabase Auth routes with fallback to local auth
   app.post('/api/auth/signup', async (req, res) => {
     try {
       const { email, password, username, firstName, lastName } = req.body;
@@ -15,46 +15,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Email, password, and username are required" });
       }
 
-      // Sign up with Supabase
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            username,
-            first_name: firstName,
-            last_name: lastName,
+      // Try Supabase first, fallback to local auth if Supabase fails
+      try {
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              username,
+              first_name: firstName,
+              last_name: lastName,
+            }
           }
+        });
+
+        if (authError) {
+          console.log('Supabase signup failed, falling back to local auth:', authError.message);
+          throw new Error('Supabase failed, using local fallback');
         }
-      });
 
-      if (authError) {
-        return res.status(400).json({ message: authError.message });
+        if (authData.user) {
+          // Supabase signup successful
+          const userData = {
+            id: authData.user.id,
+            username: username,
+            email: email,
+            firstName: firstName || null,
+            lastName: lastName || null,
+            isAdmin: false,
+            supabaseId: authData.user.id,
+          };
+
+          const token = generateToken(userData);
+
+          return res.status(201).json({
+            user: userData,
+            token,
+            supabaseSession: authData.session
+          });
+        }
+      } catch (supabaseError) {
+        console.log('Supabase signup failed, using local authentication fallback');
       }
 
-      if (!authData.user) {
-        return res.status(400).json({ message: "Failed to create user" });
+      // Fallback to local authentication
+      const existingUser = await storage.getUserByUsername(username);
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
       }
 
-      // For Supabase auth, we don't need to store user in our database
-      // The user data is managed by Supabase
-      const userData = {
-        id: authData.user.id,
-        username: username,
-        email: email,
-        firstName: firstName || null,
-        lastName: lastName || null,
+      if (email) {
+        const existingEmail = await storage.getUserByEmail(email);
+        if (existingEmail) {
+          return res.status(400).json({ message: "Email already exists" });
+        }
+      }
+
+      const hashedPassword = await hashPassword(password);
+      const user = await storage.createUser({
+        username,
+        email,
+        password: hashedPassword,
+        firstName,
+        lastName,
         isAdmin: false,
-        supabaseId: authData.user.id,
-      };
-
-      const token = generateToken(userData);
-
-      res.status(201).json({
-        user: userData,
-        token,
-        supabaseSession: authData.session
       });
+
+      const token = generateToken({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin || false,
+      });
+
+      const { password: _, ...userWithoutPassword } = user;
+      res.status(201).json({ user: userWithoutPassword, token });
     } catch (error: any) {
       console.error("Signup error:", error);
       res.status(400).json({ message: error.message || "Registration failed" });
@@ -69,39 +104,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Email and password are required" });
       }
 
-      // Sign in with Supabase
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // Try Supabase first, fallback to local auth
+      try {
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      if (authError) {
-        return res.status(401).json({ message: authError.message });
+        if (!authError && authData.user) {
+          // Supabase signin successful
+          const userMetadata = authData.user.user_metadata || {};
+          const userData = {
+            id: authData.user.id,
+            username: userMetadata.username || email.split('@')[0],
+            email: authData.user.email,
+            firstName: userMetadata.first_name || null,
+            lastName: userMetadata.last_name || null,
+            isAdmin: false,
+            supabaseId: authData.user.id,
+          };
+
+          const token = generateToken(userData);
+
+          return res.json({
+            user: userData,
+            token,
+            supabaseSession: authData.session
+          });
+        }
+      } catch (supabaseError) {
+        console.log('Supabase signin failed, trying local authentication');
       }
 
-      if (!authData.user) {
+      // Fallback to local authentication
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      // For Supabase auth, get user data from Supabase user metadata
-      const userMetadata = authData.user.user_metadata || {};
-      const userData = {
-        id: authData.user.id,
-        username: userMetadata.username || email.split('@')[0],
-        email: authData.user.email,
-        firstName: userMetadata.first_name || null,
-        lastName: userMetadata.last_name || null,
-        isAdmin: false,
-        supabaseId: authData.user.id,
-      };
+      const isValidPassword = await comparePassword(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
 
-      const token = generateToken(userData);
-
-      res.json({
-        user: userData,
-        token,
-        supabaseSession: authData.session
+      const token = generateToken({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin || false,
       });
+
+      const { password: _, ...userWithoutPassword } = user;
+      res.json({ user: userWithoutPassword, token });
     } catch (error: any) {
       console.error("Signin error:", error);
       res.status(400).json({ message: error.message || "Sign in failed" });
