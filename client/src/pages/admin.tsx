@@ -309,22 +309,23 @@ export default function AdminPage({}: AdminPageProps) {
               <div className="grid gap-6 w-full max-w-full">
                 {projects.map((project: Project) => (
                   <Card key={project.id} className="w-full max-w-full overflow-hidden">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle className="flex items-center gap-2">
-                            {project.title}
+                    <CardHeader className="w-full max-w-full overflow-hidden">
+                      <div className="flex justify-between items-start w-full max-w-full overflow-hidden">
+                        <div className="flex-1 min-w-0 pr-2">
+                          <CardTitle className="flex items-center gap-2 flex-wrap break-words text-base sm:text-lg">
+                            <span className="break-words min-w-0 flex-shrink">{project.title}</span>
                             {project.featured && (
-                              <Badge variant="secondary">Featured</Badge>
+                              <Badge variant="secondary" className="flex-shrink-0">Featured</Badge>
                             )}
                           </CardTitle>
-                          <Badge variant="outline">{project.category}</Badge>
+                          <Badge variant="outline" className="mt-1">{project.category}</Badge>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-shrink-0">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => openProjectDialog(project)}
+                            className="flex-shrink-0"
                           >
                             <Edit2 className="h-4 w-4" />
                           </Button>
@@ -332,6 +333,7 @@ export default function AdminPage({}: AdminPageProps) {
                             variant="outline"
                             size="sm"
                             onClick={() => deleteProjectMutation.mutate(project.id)}
+                            className="flex-shrink-0"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -339,10 +341,10 @@ export default function AdminPage({}: AdminPageProps) {
                       </div>
                     </CardHeader>
                     <CardContent className="w-full max-w-full overflow-hidden">
-                      <p className="text-slate-400 mb-4 break-words">{project.description}</p>
-                      <div className="flex flex-wrap gap-2">
+                      <p className="text-slate-400 mb-4 break-words overflow-wrap-anywhere">{project.description}</p>
+                      <div className="flex flex-wrap gap-2 w-full max-w-full">
                         {project.technologies.map((tech, index) => (
-                          <Badge key={index} variant="secondary">{tech}</Badge>
+                          <Badge key={index} variant="secondary" className="break-words max-w-full">{tech}</Badge>
                         ))}
                       </div>
                     </CardContent>
@@ -367,25 +369,26 @@ export default function AdminPage({}: AdminPageProps) {
               <div className="grid gap-6 w-full max-w-full">
                 {blogPosts.map((post: BlogPost) => (
                   <Card key={post.id} className="w-full max-w-full overflow-hidden">
-                    <CardHeader>
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <CardTitle className="flex items-center gap-2">
-                            {post.title}
+                    <CardHeader className="w-full max-w-full overflow-hidden">
+                      <div className="flex justify-between items-start w-full max-w-full overflow-hidden">
+                        <div className="flex-1 min-w-0 pr-2">
+                          <CardTitle className="flex items-center gap-2 flex-wrap break-words text-base sm:text-lg">
+                            <span className="break-words min-w-0 flex-shrink">{post.title}</span>
                             {post.published && (
-                              <Badge variant="secondary">Published</Badge>
+                              <Badge variant="secondary" className="flex-shrink-0">Published</Badge>
                             )}
                             {!post.published && (
-                              <Badge variant="outline">Draft</Badge>
+                              <Badge variant="outline" className="flex-shrink-0">Draft</Badge>
                             )}
                           </CardTitle>
-                          <Badge variant="outline">{post.category}</Badge>
+                          <Badge variant="outline" className="mt-1">{post.category}</Badge>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 flex-shrink-0">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => openBlogPostDialog(post)}
+                            className="flex-shrink-0"
                           >
                             <Edit2 className="h-4 w-4" />
                           </Button>
@@ -393,6 +396,7 @@ export default function AdminPage({}: AdminPageProps) {
                             variant="outline"
                             size="sm"
                             onClick={() => deleteBlogPostMutation.mutate(post.id)}
+                            className="flex-shrink-0"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -400,13 +404,13 @@ export default function AdminPage({}: AdminPageProps) {
                       </div>
                     </CardHeader>
                     <CardContent className="w-full max-w-full overflow-hidden">
-                      <p className="text-slate-400 mb-4 break-words">{post.excerpt}</p>
-                      <div className="flex flex-wrap gap-2 mb-2">
+                      <p className="text-slate-400 mb-4 break-words overflow-wrap-anywhere">{post.excerpt}</p>
+                      <div className="flex flex-wrap gap-2 mb-2 w-full max-w-full">
                         {post.tags.map((tag, index) => (
-                          <Badge key={index} variant="secondary">{tag}</Badge>
+                          <Badge key={index} variant="secondary" className="break-words max-w-full">{tag}</Badge>
                         ))}
                       </div>
-                      <p className="text-sm text-slate-500">{post.readTime}</p>
+                      <p className="text-sm text-slate-500 break-words">{post.readTime}</p>
                     </CardContent>
                   </Card>
                 ))}
