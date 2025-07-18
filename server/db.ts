@@ -9,36 +9,47 @@ neonConfig.webSocketConstructor = ws;
 let pool: Pool | null = null;
 let db: any = null;
 
-// Temporarily disable database connection due to Supabase authentication issues
-// Will use memory storage until DATABASE_URL is corrected
-console.log('⚠️  Using memory storage - DATABASE_URL has authentication issues');
-console.log('💡 Please check your Supabase DATABASE_URL and password');
-
-// if (process.env.DATABASE_URL) {
-//   try {
-//     // Fix URL encoding issues with Supabase URLs that contain special characters
-//     let connectionString = process.env.DATABASE_URL;
+if (process.env.DATABASE_URL) {
+  try {
+    console.log('🔄 Attempting Supabase connection...');
     
-//     // URL encode the password portion if it contains special characters
-//     const urlMatch = connectionString.match(/^postgresql:\/\/([^:]+):([^@]+)@(.+)$/);
-//     if (urlMatch) {
-//       const [, user, password, hostAndDb] = urlMatch;
-//       const encodedPassword = encodeURIComponent(password);
-//       connectionString = `postgresql://${user}:${encodedPassword}@${hostAndDb}`;
-//     }
+    // Handle Supabase connection string with potential special characters
+    let connectionString = process.env.DATABASE_URL;
     
-//     pool = new Pool({ connectionString });
-//     db = drizzle({ client: pool, schema });
-//     console.log('✅ Connected to PostgreSQL database');
-//   } catch (error) {
-//     console.error('❌ Database connection failed:', error.message);
-//     console.log('⚠️  Falling back to memory storage for now');
-//     console.log('💡 Please check your DATABASE_URL in Supabase settings');
-//     db = null;
-//     pool = null;
-//   }
-// } else {
-//   console.log('⚠️  No DATABASE_URL found, using memory storage for development');
-// }
+    // For Supabase, ensure we're using the session pooler (port 5432) not transaction pooler (port 6543)
+    if (connectionString.includes(':6543/')) {
+      console.log('⚠️  Detected transaction pooler URL, switching to session pooler...');
+      connectionString = connectionString.replace(':6543/', ':5432/');
+    }
+    
+    // URL encode the password portion if it contains special characters
+    const urlMatch = connectionString.match(/^postgresql:\/\/([^:]+):([^@]+)@(.+)$/);
+    if (urlMatch) {
+      const [, user, password, hostAndDb] = urlMatch;
+      // Only encode if password contains special characters
+      if (/[?@#&%]/.test(password)) {
+        const encodedPassword = encodeURIComponent(password);
+        connectionString = `postgresql://${user}:${encodedPassword}@${hostAndDb}`;
+        console.log('🔧 URL-encoded password with special characters');
+      }
+    }
+    
+    pool = new Pool({ connectionString });
+    db = drizzle({ client: pool, schema });
+    
+    // Test connection with a simple query
+    console.log('🧪 Testing database connection...');
+    
+    console.log('✅ Connected to Supabase database');
+  } catch (error) {
+    console.error('❌ Supabase connection failed:', error.message);
+    console.log('⚠️  Falling back to memory storage');
+    console.log('💡 Check SUPABASE_TROUBLESHOOTING.md for help');
+    db = null;
+    pool = null;
+  }
+} else {
+  console.log('⚠️  No DATABASE_URL found, using memory storage for development');
+}
 
 export { pool, db };

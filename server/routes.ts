@@ -214,6 +214,90 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Database initialization endpoint (for when Supabase connection is fixed)
+  app.post('/api/admin/init-database', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+      const { db } = await import('./db.js');
+      
+      if (!db) {
+        return res.status(400).json({ message: "Database not connected. Please check DATABASE_URL." });
+      }
+      
+      const { sql } = await import('drizzle-orm');
+      const bcrypt = await import('bcryptjs');
+      
+      console.log('🚀 Initializing database schema...');
+      
+      // Create users table
+      await db.execute(sql`
+        CREATE TABLE IF NOT EXISTS users (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(50) NOT NULL UNIQUE,
+          email VARCHAR(255) UNIQUE,
+          password VARCHAR(255) NOT NULL,
+          first_name VARCHAR(100),
+          last_name VARCHAR(100),
+          profile_image_url VARCHAR(500),
+          is_admin BOOLEAN DEFAULT false,
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW()
+        )
+      `);
+      
+      // Create projects table
+      await db.execute(sql`
+        CREATE TABLE IF NOT EXISTS projects (
+          id SERIAL PRIMARY KEY,
+          title TEXT NOT NULL,
+          description TEXT NOT NULL,
+          category TEXT NOT NULL,
+          technologies TEXT[] NOT NULL,
+          github_url TEXT,
+          live_url TEXT,
+          image TEXT NOT NULL,
+          featured BOOLEAN DEFAULT false,
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW()
+        )
+      `);
+      
+      // Create blog_posts table
+      await db.execute(sql`
+        CREATE TABLE IF NOT EXISTS blog_posts (
+          id SERIAL PRIMARY KEY,
+          title TEXT NOT NULL,
+          excerpt TEXT NOT NULL,
+          content TEXT NOT NULL,
+          category TEXT NOT NULL,
+          tags TEXT[] NOT NULL,
+          image TEXT NOT NULL,
+          read_time TEXT NOT NULL,
+          published BOOLEAN DEFAULT false,
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NOW()
+        )
+      `);
+      
+      // Check if admin user exists
+      const adminCheck = await db.execute(sql`SELECT id FROM users WHERE username = 'admin' LIMIT 1`);
+      
+      if (adminCheck.length === 0) {
+        const hashedPassword = await bcrypt.hash('admin123', 10);
+        await db.execute(sql`
+          INSERT INTO users (username, email, password, first_name, last_name, is_admin)
+          VALUES ('admin', 'admin@portfolio.dev', ${hashedPassword}, 'Admin', 'User', true)
+        `);
+      }
+      
+      console.log('✅ Database initialization completed');
+      res.json({ message: "Database initialized successfully" });
+      
+    } catch (error) {
+      console.error('❌ Database initialization failed:', error);
+      res.status(500).json({ message: "Database initialization failed", error: error.message });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
