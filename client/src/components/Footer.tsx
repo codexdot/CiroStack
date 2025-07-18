@@ -8,6 +8,7 @@ export default function Footer({ scrollToSection }: FooterProps) {
     { label: "Projects", section: "projects" },
     { label: "AI/ML", section: "ai" },
     { label: "Skills", section: "skills" },
+    { label: "Blog", section: "blog" },
     { label: "Contact", section: "contact" }
   ];
 
