@@ -15,10 +15,11 @@ export default function WhatsAppButton({ phoneNumber, message = "Hello! I'm inte
   return (
     <button
       onClick={handleWhatsAppClick}
-      className="fixed bottom-6 right-6 z-50 gradient-bg text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 group hover:shadow-xl"
+      className="fixed bottom-6 right-6 z-50 text-white rounded-full p-4 shadow-lg transition-all duration-300 hover:scale-110 group hover:shadow-xl animate-gradient-x"
       aria-label="Contact via WhatsApp"
       style={{
-        background: 'linear-gradient(135deg, #00f0ff, #ff00f0)',
+        background: 'linear-gradient(270deg, #00f0ff, #ff00f0, #00f0ff)',
+        backgroundSize: '200% 200%',
         boxShadow: '0 4px 15px rgba(0, 240, 255, 0.3)'
       }}
     >
