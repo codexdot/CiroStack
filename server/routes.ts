@@ -16,46 +16,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Try Supabase first, fallback to local auth if Supabase fails
-      try {
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              username,
-              first_name: firstName,
-              last_name: lastName,
+      if (supabase) {
+        try {
+          const { data: authData, error: authError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: {
+                username,
+                first_name: firstName,
+                last_name: lastName,
+              }
             }
-          }
-        });
-
-        if (authError) {
-          console.log('Supabase signup failed, falling back to local auth:', authError.message);
-          throw new Error('Supabase failed, using local fallback');
-        }
-
-        if (authData.user) {
-          // Supabase signup successful
-          const userData = {
-            id: authData.user.id,
-            username: username,
-            email: email,
-            firstName: firstName || null,
-            lastName: lastName || null,
-            isAdmin: false,
-            supabaseId: authData.user.id,
-          };
-
-          const token = generateToken(userData);
-
-          return res.status(201).json({
-            user: userData,
-            token,
-            supabaseSession: authData.session
           });
+
+          if (authError) {
+            console.log('Supabase signup failed, falling back to local auth:', authError.message);
+            throw new Error('Supabase failed, using local fallback');
+          }
+
+          if (authData.user) {
+            // Supabase signup successful
+            const userData = {
+              id: authData.user.id,
+              username: username,
+              email: email,
+              firstName: firstName || null,
+              lastName: lastName || null,
+              isAdmin: false,
+              supabaseId: authData.user.id,
+            };
+
+            const token = generateToken(userData);
+
+            return res.status(201).json({
+              user: userData,
+              token,
+              supabaseSession: authData.session
+            });
+          }
+        } catch (supabaseError) {
+          console.log('Supabase signup failed, using local authentication fallback');
         }
-      } catch (supabaseError) {
-        console.log('Supabase signup failed, using local authentication fallback');
+      } else {
+        console.log('Supabase not available, using local authentication');
       }
 
       // Fallback to local authentication
@@ -105,45 +109,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Try Supabase first, fallback to local auth
-      try {
-        console.log(`🔐 Attempting Supabase signin for: ${email}`);
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        console.log('Supabase signin result:', { 
-          hasUser: !!authData?.user, 
-          error: authError?.message,
-          userId: authData?.user?.id,
-          email: authData?.user?.email 
-        });
-
-        if (!authError && authData.user) {
-          console.log('✅ Supabase authentication successful');
-          // Supabase signin successful
-          const userMetadata = authData.user.user_metadata || {};
-          const userData = {
-            id: authData.user.id,
-            username: userMetadata.username || email.split('@')[0],
-            email: authData.user.email,
-            firstName: userMetadata.first_name || null,
-            lastName: userMetadata.last_name || null,
-            isAdmin: false,
-            supabaseId: authData.user.id,
-          };
-
-          const token = generateToken(userData);
-
-          return res.json({
-            user: userData,
-            token,
-            supabaseSession: authData.session
+      if (supabase) {
+        try {
+          console.log(`🔐 Attempting Supabase signin for: ${email}`);
+          const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
           });
+
+          console.log('Supabase signin result:', { 
+            hasUser: !!authData?.user, 
+            error: authError?.message,
+            userId: authData?.user?.id,
+            email: authData?.user?.email 
+          });
+
+          if (!authError && authData.user) {
+            console.log('✅ Supabase authentication successful');
+            // Supabase signin successful
+            const userMetadata = authData.user.user_metadata || {};
+            const userData = {
+              id: authData.user.id,
+              username: userMetadata.username || email.split('@')[0],
+              email: authData.user.email,
+              firstName: userMetadata.first_name || null,
+              lastName: userMetadata.last_name || null,
+              isAdmin: false,
+              supabaseId: authData.user.id,
+            };
+
+            const token = generateToken(userData);
+
+            return res.json({
+              user: userData,
+              token,
+              supabaseSession: authData.session
+            });
+          }
+        } catch (supabaseError) {
+          console.log('❌ Supabase signin error:', supabaseError.message);
+          console.log('⚠️  Falling back to local authentication');
         }
-      } catch (supabaseError) {
-        console.log('❌ Supabase signin error:', supabaseError.message);
-        console.log('⚠️  Falling back to local authentication');
+      } else {
+        console.log('Supabase not available, using local authentication');
       }
 
       // Fallback to local authentication
@@ -174,9 +182,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/auth/signout', async (req, res) => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        return res.status(400).json({ message: error.message });
+      if (supabase) {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          return res.status(400).json({ message: error.message });
+        }
       }
       res.json({ message: "Signed out successfully" });
     } catch (error: any) {
