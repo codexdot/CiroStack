@@ -37,8 +37,9 @@ if (process.env.DATABASE_URL) {
     pool = new Pool({ connectionString });
     db = drizzle({ client: pool, schema });
     
-    // Test connection with a simple query
+    // Test connection with a simple query - but don't fail if tables don't exist
     console.log('🧪 Testing database connection...');
+    await pool.query('SELECT 1 as test');
     
     console.log('✅ Connected to Supabase database');
   } catch (error) {

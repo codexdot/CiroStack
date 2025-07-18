@@ -47,16 +47,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
+    if (!db) throw new Error("Database not initialized");
     const [user] = await db.select().from(users).where(eq(users.username, username));
     return user;
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
+    if (!db) throw new Error("Database not initialized");
     const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 
   async createUser(userData: InsertUser): Promise<User> {
+    if (!db) throw new Error("Database not initialized");
     const [user] = await db
       .insert(users)
       .values(userData)
