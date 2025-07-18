@@ -3,8 +3,35 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Smartphone, Brain, Code, Zap, Users, Star } from "lucide-react";
+import Navigation from "@/components/Navigation";
+import { useState, useEffect } from "react";
 
 export default function Services() {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === 'dark');
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    // This function is not used on the services page but required by Navigation component
+  };
   const services = [
     {
       icon: <Brain className="w-8 h-8 text-[#00f0ff]" />,
@@ -117,6 +144,11 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Navigation 
+        isDarkMode={isDarkMode} 
+        toggleDarkMode={toggleDarkMode} 
+        scrollToSection={scrollToSection} 
+      />
       {/* Header */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center">
