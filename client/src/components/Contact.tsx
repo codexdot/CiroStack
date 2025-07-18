@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { contactFormSchema, type ContactFormData } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
+import { SiX } from "react-icons/si";
 import {
   Form,
   FormControl,
@@ -56,10 +57,10 @@ export default function Contact() {
   };
 
   const socialLinks = [
-    { icon: "fab fa-github", href: "#" },
-    { icon: "fab fa-linkedin-in", href: "#" },
-    { icon: "fab fa-x-twitter", href: "#" },
-    { icon: "fab fa-medium", href: "#" }
+    { icon: "fab fa-github", href: "#", component: null },
+    { icon: "fab fa-linkedin-in", href: "#", component: null },
+    { icon: "x-icon", href: "#", component: SiX },
+    { icon: "fab fa-medium", href: "#", component: null }
   ];
 
   return (
@@ -117,7 +118,11 @@ export default function Contact() {
                     href={link.href} 
                     className="social-icon bg-slate-800 w-10 h-10 rounded-full flex items-center justify-center hover:bg-[#00f0ff]/10 transition-colors"
                   >
-                    <i className={`${link.icon} text-white`}></i>
+                    {link.component ? (
+                      <link.component className="text-white w-4 h-4" />
+                    ) : (
+                      <i className={`${link.icon} text-white`}></i>
+                    )}
                   </a>
                 ))}
               </div>
