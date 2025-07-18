@@ -48,7 +48,9 @@ export default function Hero({ scrollToSection }: HeroProps) {
               <img 
                 src="/logotrans.png" 
                 alt="Professional developer portrait" 
-                className="w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-0 border-border shadow-xl animate-float"
+                className="w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-0 border-border shadow-xl animate-float select-none pointer-events-none"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
               />
             </div>
           </div>

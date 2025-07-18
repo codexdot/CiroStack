@@ -78,7 +78,9 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               <img 
                 src="/logotrans.png" 
                 alt="CiroStack Logo" 
-                className="w-16 h-16 object-contain -ml-2"
+                className="w-16 h-16 object-contain -ml-2 select-none pointer-events-none"
+                draggable={false}
+                onContextMenu={(e) => e.preventDefault()}
               />
               <span>CIRO<span className="text-foreground">STACK</span></span>
             </button>
