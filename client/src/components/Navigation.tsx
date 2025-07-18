@@ -54,6 +54,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               Skills
             </button>
             <button 
+              onClick={() => handleNavClick('blog')} 
+              className="nav-link text-white hover:text-[#00f0ff] transition-colors"
+            >
+              Blog
+            </button>
+            <button 
               onClick={() => handleNavClick('contact')} 
               className="nav-link text-white hover:text-[#00f0ff] transition-colors"
             >
@@ -121,6 +127,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
             className="block w-full text-left px-3 py-2 text-white hover:bg-slate-800 rounded-md"
           >
             Skills
+          </button>
+          <button 
+            onClick={() => handleNavClick('blog')} 
+            className="block w-full text-left px-3 py-2 text-white hover:bg-slate-800 rounded-md"
+          >
+            Blog
           </button>
           <button 
             onClick={() => handleNavClick('contact')} 

@@ -182,6 +182,99 @@
   .timeline-item:last-child::after {
     display: none;
   }
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Prose styles for blog content */
+.prose {
+  color: #e2e8f0;
+}
+
+.prose h1 {
+  color: #f8fafc;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+}
+
+.prose h2 {
+  color: #f8fafc;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.prose h3 {
+  color: #f8fafc;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+.prose ul, .prose ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose strong {
+  color: #00f0ff;
+  font-weight: 600;
+}
+
+.prose a {
+  color: #00f0ff;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: #00f0ff;
+  opacity: 0.8;
+}
+
+.prose code {
+  background-color: rgba(51, 65, 85, 0.5);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  color: #00f0ff;
+}
+
+.prose pre {
+  background-color: rgba(51, 65, 85, 0.5);
+  border: 1px solid rgba(51, 65, 85, 1);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #e2e8f0;
+}
   
   .social-icon {
     transition: all 0.3s ease;

@@ -39,6 +39,7 @@ Preferred communication style: Simple, everyday language.
 - **Projects**: Portfolio showcase with filtering and categorization
 - **AI/ML Section**: Specialized section highlighting AI and machine learning work
 - **Skills**: Technical skills display with experience timeline
+- **Blog**: Modern blog section with full markdown support, syntax highlighting, and content management
 - **Contact**: Contact form with validation and toast notifications
 
 ### Backend Components
@@ -73,6 +74,7 @@ Preferred communication style: Simple, everyday language.
 - **Validation**: Zod with Hookform resolvers
 - **Routing**: Wouter
 - **Icons**: Font Awesome, Lucide React
+- **Markdown Processing**: React Markdown, Remark GFM, Rehype Highlight, Rehype Raw
 
 ### Backend Dependencies
 - **Server Framework**: Express.js
