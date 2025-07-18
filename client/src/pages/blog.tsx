@@ -632,7 +632,9 @@ Secure authentication requires multiple layers of protection. Follow these patte
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
-              <article key={post.id} className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-800 card-hover">
+              <article key={post.id} className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-800 card-hover cursor-pointer transition-all duration-300 hover:bg-slate-800/70 hover:border-slate-700 hover:scale-105"
+                onClick={() => setSelectedPost(post)}
+              >
                 <div className="relative">
                   <img 
                     src={post.image} 
@@ -664,12 +666,9 @@ Secure authentication requires multiple layers of protection. Follow these patte
                     ))}
                   </div>
                   
-                  <button
-                    onClick={() => setSelectedPost(post)}
-                    className="text-[#00f0ff] font-medium inline-flex items-center hover:text-[#00f0ff]/80 transition-colors"
-                  >
+                  <div className="text-[#00f0ff] font-medium inline-flex items-center group-hover:text-[#00f0ff]/80 transition-colors">
                     Read More <i className="fas fa-arrow-right ml-2"></i>
-                  </button>
+                  </div>
                 </div>
               </article>
             ))}
