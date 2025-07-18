@@ -7,6 +7,7 @@ This is a modern portfolio application built with React and Express.js, showcasi
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Supabase is mandatory, not optional for this application.
 
 ## Recent Changes
 
