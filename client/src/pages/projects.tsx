@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Link } from "wouter";
 import { useTheme } from "@/hooks/use-theme";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { ArrowLeft, ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 
 export default function Projects() {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -126,10 +125,6 @@ export default function Projects() {
         {/* Header */}
         <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="mb-8">
-            <Link href="/" className="inline-flex items-center text-[#00f0ff] hover:text-[#00f0ff]/80 transition-colors mb-6">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Link>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               My <span className="gradient-text">Projects</span>
             </h1>
