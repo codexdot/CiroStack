@@ -73,7 +73,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
           <div className="flex items-center">
             <button 
               onClick={() => handleNavClick('home')} 
-              className="flex items-center space-x-2 text-2xl font-bold gradient-text hover:opacity-80 transition-opacity"
+              className="flex items-center space-x-1 text-2xl font-bold gradient-text hover:opacity-80 transition-opacity"
             >
               <img 
                 src="/logotrans.png" 
