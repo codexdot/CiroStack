@@ -41,6 +41,7 @@ export interface IStorage {
 export class DatabaseStorage implements IStorage {
   // User operations
   async getUser(id: number): Promise<User | undefined> {
+    if (!db) throw new Error("Database not initialized");
     const [user] = await db.select().from(users).where(eq(users.id, id));
     return user;
   }
@@ -365,6 +366,11 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Use MemStorage temporarily until Supabase is configured
+// Initialize storage based on available database connection
+import { db } from "./db";
+
 // Use database storage when DATABASE_URL is available, otherwise fall back to memory storage
-export const storage = process.env.DATABASE_URL ? new DatabaseStorage() : new MemStorage();
+export const storage: IStorage = db ? new DatabaseStorage() : new MemStorage();
+
+console.log(`📦 Storage initialized: ${db ? 'PostgreSQL Database' : 'Memory Storage (Development)'}`);
+console.log('✅ Application storage ready');
