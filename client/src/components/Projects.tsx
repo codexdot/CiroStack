@@ -4,7 +4,7 @@ export default function Projects() {
       id: 1,
       title: "HealthAI Companion",
       description: "An intelligent health assistant that uses ML to analyze symptoms and provide personalized recommendations.",
-      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
       tags: ["Swift", "CoreML", "HealthKit"],
       category: "AI"
     },
@@ -12,7 +12,7 @@ export default function Projects() {
       id: 2,
       title: "FinSmart Predictor",
       description: "Financial forecasting app that uses predictive analytics to help users make better investment decisions.",
-      image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
       tags: ["Kotlin", "TensorFlow Lite", "Firebase"],
       category: "ML"
     },
@@ -20,7 +20,7 @@ export default function Projects() {
       id: 3,
       title: "VisionAR Navigator",
       description: "Augmented reality navigation system with object recognition for visually impaired users.",
-      image: "https://images.unsplash.com/photo-1592478411213-6153e4ebc696?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
       tags: ["SwiftUI", "ARKit", "Vision"],
       category: "AR"
     }

@@ -1,21 +1,70 @@
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
-import AISection from "@/components/AISection";
+import AIMLSection from "@/components/AIMLSection";
 import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 export default function Home() {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Set initial dark mode
+    document.documentElement.classList.add('dark');
+    
+    // Add scroll animation
+    const animateOnScroll = () => {
+      const elements = document.querySelectorAll('.project-card, .timeline-item, .skill-pill');
+      
+      elements.forEach(element => {
+        const elementPosition = element.getBoundingClientRect().top;
+        const screenPosition = window.innerHeight / 1.2;
+        
+        if (elementPosition < screenPosition) {
+          element.classList.add('animate-fadeIn');
+        }
+      });
+    };
+    
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', animateOnScroll);
+      window.removeEventListener('load', animateOnScroll);
+    };
+  }, []);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      window.scrollTo({
+        top: element.offsetTop - 80,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-50">
-      <Navigation />
-      <Hero />
+    <div className="min-h-screen">
+      <Navigation 
+        isDarkMode={isDarkMode} 
+        toggleDarkMode={toggleDarkMode}
+        scrollToSection={scrollToSection}
+      />
+      <Hero scrollToSection={scrollToSection} />
       <Projects />
-      <AISection />
+      <AIMLSection />
       <Skills />
       <Contact />
-      <Footer />
+      <Footer scrollToSection={scrollToSection} />
     </div>
   );
 }
