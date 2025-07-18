@@ -60,7 +60,7 @@ export default function Contact() {
     { icon: "fab fa-github", href: "https://github.com/codexdot", component: null },
     { icon: "fab fa-linkedin-in", href: "https://www.linkedin.com/in/cirostack", component: null },
     { icon: "x-icon", href: "https://x.com/CiroStack", component: SiX },
-    { icon: "fab fa-medium", href: "#", component: null }
+    { icon: "fab fa-medium", href: "https://medium.com/@cirostack", component: null }
   ];
 
   return (
