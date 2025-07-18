@@ -4,6 +4,9 @@ import { useLocation } from 'wouter';
 // Global scroll position store
 const scrollPositions = new Map<string, number>();
 
+// Expose globally for navigation components
+(window as any).scrollPositions = scrollPositions;
+
 export function useScrollPosition(pageKey?: string) {
   const [location] = useLocation();
   const previousLocation = useRef<string>('');
@@ -62,6 +65,9 @@ export function useScrollPosition(pageKey?: string) {
       if (savedPosition !== undefined) {
         window.scrollTo(0, savedPosition);
       }
+    },
+    clearScrollPosition: (key?: string) => {
+      scrollPositions.delete(key || currentPageKey);
     }
   };
 }

@@ -26,9 +26,19 @@ export default function Footer({ scrollToSection }: FooterProps) {
       // Scroll to top when navigating to projects page
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else if (sectionId === 'home') {
+      // Clear any saved scroll position for home page
+      const scrollPositions = (window as any).scrollPositions;
+      if (scrollPositions) {
+        scrollPositions.delete('/');
+      }
+      
       setLocation('/');
-      // Scroll to top when navigating to home page
-      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+      // Force scroll to top after navigation - longer delay to override useScrollPosition
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        // Additional backup scroll
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'instant' }), 10);
+      }, 120);
     } else {
       // For homepage sections (ai, skills, contact), check if we're already on homepage
       if (location === '/') {
