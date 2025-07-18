@@ -182,7 +182,7 @@ export default function Services() {
             <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-muted/50 bg-card/50 backdrop-blur-sm">
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className={`p-3 rounded-lg bg-gradient-to-r ${service.gradient} bg-opacity-10`}>
+                  <div className="p-3 rounded-lg bg-muted/20 border border-muted/40">
                     {service.icon}
                   </div>
                   <Badge variant="secondary" className="text-xs">
