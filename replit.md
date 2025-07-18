@@ -21,6 +21,10 @@ Preferred communication style: Simple, everyday language.
 - Enhanced light mode with sophisticated blue-toned color palette and clean white container backgrounds
 - Updated all components to use theme-aware CSS variables for consistent styling across themes
 - Set dark mode as default theme with localStorage persistence and automatic theme detection
+- Enhanced contact form with React Hook Form and Zod validation (name, email, subject, message validation)
+- Created comprehensive Projects page with category filtering and detailed project information
+- Implemented cross-page navigation: clicking homepage sections from other pages navigates home and scrolls to section
+- Added hash-based navigation support for deep linking to specific homepage sections
 - Removed yellow focus outline from theme toggle button for better user experience
 
 ## System Architecture

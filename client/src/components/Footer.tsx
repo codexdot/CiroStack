@@ -5,7 +5,7 @@ interface FooterProps {
 }
 
 export default function Footer({ scrollToSection }: FooterProps) {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   
   const navLinks = [
     { label: "Home", section: "home" },
@@ -19,8 +19,19 @@ export default function Footer({ scrollToSection }: FooterProps) {
   const handleNavClick = (sectionId: string) => {
     if (sectionId === 'blog') {
       setLocation('/blog');
+    } else if (sectionId === 'projects') {
+      setLocation('/projects');
+    } else if (sectionId === 'home') {
+      setLocation('/');
     } else {
-      scrollToSection(sectionId);
+      // For homepage sections (ai, skills, contact), check if we're already on homepage
+      if (location === '/') {
+        // Already on homepage, just scroll to section
+        scrollToSection(sectionId);
+      } else {
+        // Navigate to homepage with hash for section
+        setLocation(`/#${sectionId}`);
+      }
     }
   };
 

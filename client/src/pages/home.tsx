@@ -16,6 +16,17 @@ export default function Home() {
   useScrollPosition();
 
   useEffect(() => {
+    // Handle hash-based navigation on page load
+    const handleHashNavigation = () => {
+      const hash = window.location.hash.substring(1); // Remove the '#'
+      if (hash) {
+        // Small delay to ensure page is fully loaded
+        setTimeout(() => {
+          scrollToSection(hash);
+        }, 100);
+      }
+    };
+
     // Add scroll animation
     const animateOnScroll = () => {
       const elements = document.querySelectorAll('.project-card, .timeline-item, .skill-pill');
@@ -30,12 +41,17 @@ export default function Home() {
       });
     };
     
+    // Handle initial hash navigation
+    handleHashNavigation();
+    
     window.addEventListener('scroll', animateOnScroll);
     window.addEventListener('load', animateOnScroll);
+    window.addEventListener('hashchange', handleHashNavigation);
     
     return () => {
       window.removeEventListener('scroll', animateOnScroll);
       window.removeEventListener('load', animateOnScroll);
+      window.removeEventListener('hashchange', handleHashNavigation);
     };
   }, []);
 
