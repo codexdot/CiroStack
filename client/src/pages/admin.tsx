@@ -297,7 +297,10 @@ export default function AdminPage({}: AdminPageProps) {
           <TabsContent value="projects" className="mt-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Projects</h2>
-              <Button onClick={() => openProjectDialog()}>
+              <Button 
+                onClick={() => openProjectDialog()}
+                className="bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] hover:from-[#00d9e6] hover:to-[#e600d9] text-black font-semibold transition-all duration-300"
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Add Project
               </Button>
@@ -357,7 +360,10 @@ export default function AdminPage({}: AdminPageProps) {
           <TabsContent value="blog" className="mt-6">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold">Blog Posts</h2>
-              <Button onClick={() => openBlogPostDialog()}>
+              <Button 
+                onClick={() => openBlogPostDialog()}
+                className="bg-gradient-to-r from-[#00f0ff] to-[#ff00f0] hover:from-[#00d9e6] hover:to-[#e600d9] text-black font-semibold transition-all duration-300"
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Add Blog Post
               </Button>
