@@ -5,21 +5,24 @@ export default function AIMLSection() {
       stats: "GitHub · 1.2k stars",
       description: "Contributed optimized model conversion pipelines and quantization techniques for TensorFlow Lite models.",
       technologies: ["Python", "C++"],
-      linkText: "View PR"
+      linkText: "View PR",
+      icon: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
     },
     {
       title: "PyTorch Mobile",
       stats: "GitHub · 3.4k stars",
       description: "Implemented performance improvements for model serialization and memory management on iOS.",
       technologies: ["C++", "Objective-C"],
-      linkText: "View Commit"
+      linkText: "View Commit",
+      icon: "https://pytorch.org/assets/images/pytorch-logo.png"
     },
     {
       title: "OpenCV Android",
       stats: "GitHub · 2.1k stars",
       description: "Added GPU acceleration support for real-time image segmentation models.",
       technologies: ["Java", "NDK"],
-      linkText: "View Issue"
+      linkText: "View Issue",
+      icon: "https://opencv.org/wp-content/uploads/2020/07/OpenCV_logo_black-2.png"
     }
   ];
 
@@ -125,7 +128,11 @@ export default function AIMLSection() {
             {contributions.map((contribution, index) => (
               <div key={index} className="bg-slate-800/50 rounded-xl p-6 border border-slate-800">
                 <div className="flex items-center mb-4">
-                  <i className="fab fa-github text-white text-2xl mr-4"></i>
+                  <img 
+                    src={contribution.icon} 
+                    className={`w-10 h-10 mr-4 rounded-full ${contribution.title === "OpenCV Android" ? "bg-white p-1" : ""}`}
+                    alt={contribution.title}
+                  />
                   <div>
                     <h4 className="font-bold">{contribution.title}</h4>
                     <p className="text-slate-400 text-sm">{contribution.stats}</p>
