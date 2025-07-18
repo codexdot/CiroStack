@@ -41,16 +41,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
     } else {
       // For homepage sections (ai, skills, contact), always update URL with hash
       if (location === '/') {
-        // Already on homepage, update URL hash and scroll to section
-        window.location.hash = sectionId;
+        // Already on homepage, update URL and scroll to section
+        setLocation(`/#${sectionId}`);
         scrollToSection(sectionId);
       } else {
-        // Navigate to homepage first
-        setLocation('/');
-        // Update URL hash after navigation
-        setTimeout(() => {
-          window.location.hash = sectionId;
-        }, 100);
+        // Navigate to homepage with hash for section
+        setLocation(`/#${sectionId}`);
       }
     }
   };
