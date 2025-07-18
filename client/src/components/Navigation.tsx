@@ -26,6 +26,10 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
       setLocation('/projects');
       // Scroll to top when navigating to projects page
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+    } else if (sectionId === 'admin') {
+      setLocation('/admin');
+      // Scroll to top when navigating to admin page
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     } else if (sectionId === 'home') {
       // Clear any saved scroll position for home page
       const scrollPositions = (window as any).scrollPositions;
@@ -100,6 +104,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               className="nav-link text-foreground hover:text-[#00f0ff] transition-colors"
             >
               Contact
+            </button>
+            <button 
+              onClick={() => handleNavClick('admin')} 
+              className="nav-link text-foreground hover:text-[#00f0ff] transition-colors"
+            >
+              Admin
             </button>
           </div>
           
@@ -182,6 +192,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
             className="block w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
           >
             Contact
+          </button>
+          <button 
+            onClick={() => handleNavClick('admin')} 
+            className="block w-full text-left px-3 py-2 text-foreground hover:bg-muted rounded-md"
+          >
+            Admin
           </button>
         </div>
       </div>
