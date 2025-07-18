@@ -78,7 +78,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               <img 
                 src="/logosm.png" 
                 alt="CiroStack Logo" 
-                className="w-8 h-8 object-contain"
+                className="w-12 h-12 object-contain"
               />
               <span>CIRO<span className="text-foreground">STACK</span></span>
             </button>
