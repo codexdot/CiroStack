@@ -46,7 +46,7 @@ export default function Hero({ scrollToSection }: HeroProps) {
             <div className="absolute inset-0 bg-gradient-to-br from-[#00f0ff] to-[#ff00f0] rounded-full blur-xl opacity-20 animate-pulse"></div>
             <div className="relative w-full h-full flex items-center justify-center">
               <img 
-                src="/profile.jpg" 
+                src="/profile.png" 
                 alt="Professional developer portrait" 
                 className="w-56 h-56 md:w-72 md:h-72 rounded-full object-cover border-4 border-border shadow-xl animate-float"
               />
