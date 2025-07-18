@@ -29,9 +29,12 @@ export default function Footer({ scrollToSection }: FooterProps) {
       <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div className="flex-1">
-            <a href="#" className="text-2xl font-bold gradient-text inline-block">
+            <button 
+              onClick={() => handleNavClick('home')} 
+              className="text-2xl font-bold gradient-text inline-block hover:opacity-80 transition-opacity"
+            >
               CIRO<span className="text-white">STACK</span>
-            </a>
+            </button>
             <p className="text-slate-400 text-sm mt-2 max-w-md">Building intelligent mobile experiences with cutting-edge AI/ML technology.</p>
           </div>
           

@@ -29,9 +29,12 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center">
-            <a href="#" className="text-2xl font-bold gradient-text">
+            <button 
+              onClick={() => handleNavClick('home')} 
+              className="text-2xl font-bold gradient-text hover:opacity-80 transition-opacity"
+            >
               CIRO<span className="text-white">STACK</span>
-            </a>
+            </button>
           </div>
           
           <div className="hidden md:flex space-x-8">
