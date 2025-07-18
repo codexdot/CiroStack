@@ -121,14 +121,14 @@ export default function Auth() {
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
           <CardDescription>
-            Sign in to your account or create a new one
+            Create a new account or sign in to an existing one
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
+          <Tabs defaultValue="signup" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
             </TabsList>
             
             <TabsContent value="signin" className="space-y-4">
@@ -138,7 +138,7 @@ export default function Auth() {
                   <Input
                     id="signin-email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="yourname@gmail.com"
                     value={signInData.email}
                     onChange={(e) => setSignInData({ ...signInData, email: e.target.value })}
                     required
@@ -235,7 +235,7 @@ export default function Auth() {
                   <Input
                     id="signup-email"
                     type="email"
-                    placeholder="john@example.com"
+                    placeholder="john@gmail.com"
                     value={signUpData.email}
                     onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
                     required

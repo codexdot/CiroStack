@@ -10,6 +10,7 @@ import ProtectedAdminPage from "@/pages/protected-admin";
 import AuthPage from "@/pages/auth";
 import Auth from "@/pages/Auth";
 import AuthCallback from "@/pages/AuthCallback";
+import TestAuth from "@/pages/TestAuth";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/auth" component={AuthPage} />
       <Route path="/login" component={Auth} />
       <Route path="/auth/callback" component={AuthCallback} />
+      <Route path="/test-auth" component={TestAuth} />
       <Route component={NotFound} />
     </Switch>
   );

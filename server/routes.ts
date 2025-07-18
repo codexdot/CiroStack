@@ -36,42 +36,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Failed to create user" });
       }
 
-      // Create user in our database
-      try {
-        const user = await storage.createUser({
-          username,
-          email,
-          password: '', // We don't store passwords when using Supabase auth
-          firstName: firstName || null,
-          lastName: lastName || null,
-          isAdmin: false,
-        });
+      // For Supabase auth, we don't need to store user in our database
+      // The user data is managed by Supabase
+      const userData = {
+        id: authData.user.id,
+        username: username,
+        email: email,
+        firstName: firstName || null,
+        lastName: lastName || null,
+        isAdmin: false,
+        supabaseId: authData.user.id,
+      };
 
-        const token = generateToken({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin || false,
-          supabaseId: authData.user.id,
-        });
+      const token = generateToken(userData);
 
-        res.status(201).json({
-          user: {
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            isAdmin: user.isAdmin,
-          },
-          token,
-          supabaseSession: authData.session
-        });
-      } catch (dbError: any) {
-        // If database creation fails, clean up Supabase user
-        await supabase.auth.admin.deleteUser(authData.user.id);
-        throw dbError;
-      }
+      res.status(201).json({
+        user: userData,
+        token,
+        supabaseSession: authData.session
+      });
     } catch (error: any) {
       console.error("Signup error:", error);
       res.status(400).json({ message: error.message || "Registration failed" });
@@ -100,29 +83,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      // Get user from our database
-      const user = await storage.getUserByEmail(email);
-      if (!user) {
-        return res.status(401).json({ message: "User not found in database" });
-      }
-
-      const token = generateToken({
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        isAdmin: user.isAdmin || false,
+      // For Supabase auth, get user data from Supabase user metadata
+      const userMetadata = authData.user.user_metadata || {};
+      const userData = {
+        id: authData.user.id,
+        username: userMetadata.username || email.split('@')[0],
+        email: authData.user.email,
+        firstName: userMetadata.first_name || null,
+        lastName: userMetadata.last_name || null,
+        isAdmin: false,
         supabaseId: authData.user.id,
-      });
+      };
+
+      const token = generateToken(userData);
 
       res.json({
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          isAdmin: user.isAdmin,
-        },
+        user: userData,
         token,
         supabaseSession: authData.session
       });
