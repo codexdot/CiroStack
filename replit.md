@@ -41,8 +41,9 @@ Preferred communication style: Simple, everyday language.
 - Enhanced navigation with user profile display and auth status
 - Integrated authentication hooks for React components
 - Added responsive auth page with secure sign-in flow
-- Set up proper session management with PostgreSQL storage
-- Implemented error handling for unauthorized access attempts
+- Configured for Supabase database backend (user needs to set up Supabase project)
+- Implemented temporary memory-based session storage for development
+- Added error handling for unauthorized access attempts
 
 ## System Architecture
 

@@ -121,13 +121,25 @@ export class DatabaseStorage implements IStorage {
 }
 
 export class MemStorage implements IStorage {
-  // User operations - placeholder methods for compatibility
+  private users: Map<string, User>;
+
+  // User operations - in-memory implementation for development
   async getUser(id: string): Promise<User | undefined> {
-    return undefined;
+    return this.users.get(id);
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
-    throw new Error("MemStorage does not support Replit Auth operations");
+    const user: User = {
+      id: userData.id,
+      email: userData.email ?? null,
+      firstName: userData.firstName ?? null,
+      lastName: userData.lastName ?? null,
+      profileImageUrl: userData.profileImageUrl ?? null,
+      createdAt: userData.createdAt || new Date(),
+      updatedAt: new Date(),
+    };
+    this.users.set(userData.id, user);
+    return user;
   }
 
   private projects: Map<number, Project>;
@@ -136,6 +148,7 @@ export class MemStorage implements IStorage {
   private currentBlogPostId: number;
 
   constructor() {
+    this.users = new Map();
     this.projects = new Map();
     this.blogPosts = new Map();
     this.currentProjectId = 1;
@@ -289,4 +302,5 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+// Use MemStorage temporarily until Supabase is configured
+export const storage = new MemStorage();
