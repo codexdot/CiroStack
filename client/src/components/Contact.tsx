@@ -58,7 +58,7 @@ export default function Contact() {
   const socialLinks = [
     { icon: "fab fa-github", href: "#" },
     { icon: "fab fa-linkedin-in", href: "#" },
-    { icon: "fab fa-twitter", href: "#" },
+    { icon: "fab fa-x-twitter", href: "#" },
     { icon: "fab fa-medium", href: "#" }
   ];
 
