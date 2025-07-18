@@ -33,10 +33,7 @@ export default function Contact() {
     mutationFn: (data: ContactFormData) => 
       apiRequest('/api/contact', {
         method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: data,
       }),
     onSuccess: () => {
       toast({
