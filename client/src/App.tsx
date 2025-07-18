@@ -8,6 +8,8 @@ import Blog from "@/pages/blog";
 import Projects from "@/pages/projects";
 import ProtectedAdminPage from "@/pages/protected-admin";
 import AuthPage from "@/pages/auth";
+import Auth from "@/pages/Auth";
+import AuthCallback from "@/pages/AuthCallback";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +20,8 @@ function Router() {
       <Route path="/projects" component={Projects} />
       <Route path="/admin" component={ProtectedAdminPage} />
       <Route path="/auth" component={AuthPage} />
+      <Route path="/login" component={Auth} />
+      <Route path="/auth/callback" component={AuthCallback} />
       <Route component={NotFound} />
     </Switch>
   );

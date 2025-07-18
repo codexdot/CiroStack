@@ -3,9 +3,149 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { authenticateToken, requireAdmin, generateToken, hashPassword, comparePassword } from "./auth";
 import { insertProjectSchema, insertBlogPostSchema, loginSchema, registerSchema } from "@shared/schema";
+import { supabase } from "./supabase";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth routes
+  // Supabase Auth routes
+  app.post('/api/auth/signup', async (req, res) => {
+    try {
+      const { email, password, username, firstName, lastName } = req.body;
+      
+      if (!email || !password || !username) {
+        return res.status(400).json({ message: "Email, password, and username are required" });
+      }
+
+      // Sign up with Supabase
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username,
+            first_name: firstName,
+            last_name: lastName,
+          }
+        }
+      });
+
+      if (authError) {
+        return res.status(400).json({ message: authError.message });
+      }
+
+      if (!authData.user) {
+        return res.status(400).json({ message: "Failed to create user" });
+      }
+
+      // Create user in our database
+      try {
+        const user = await storage.createUser({
+          username,
+          email,
+          password: '', // We don't store passwords when using Supabase auth
+          firstName: firstName || null,
+          lastName: lastName || null,
+          isAdmin: false,
+        });
+
+        const token = generateToken({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          isAdmin: user.isAdmin || false,
+          supabaseId: authData.user.id,
+        });
+
+        res.status(201).json({
+          user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            isAdmin: user.isAdmin,
+          },
+          token,
+          supabaseSession: authData.session
+        });
+      } catch (dbError: any) {
+        // If database creation fails, clean up Supabase user
+        await supabase.auth.admin.deleteUser(authData.user.id);
+        throw dbError;
+      }
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      res.status(400).json({ message: error.message || "Registration failed" });
+    }
+  });
+
+  app.post('/api/auth/signin', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+
+      // Sign in with Supabase
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        return res.status(401).json({ message: authError.message });
+      }
+
+      if (!authData.user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // Get user from our database
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "User not found in database" });
+      }
+
+      const token = generateToken({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        isAdmin: user.isAdmin || false,
+        supabaseId: authData.user.id,
+      });
+
+      res.json({
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          isAdmin: user.isAdmin,
+        },
+        token,
+        supabaseSession: authData.session
+      });
+    } catch (error: any) {
+      console.error("Signin error:", error);
+      res.status(400).json({ message: error.message || "Sign in failed" });
+    }
+  });
+
+  app.post('/api/auth/signout', async (req, res) => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        return res.status(400).json({ message: error.message });
+      }
+      res.json({ message: "Signed out successfully" });
+    } catch (error: any) {
+      console.error("Signout error:", error);
+      res.status(400).json({ message: error.message || "Sign out failed" });
+    }
+  });
+
+  // Legacy auth routes (keep for backward compatibility)
   app.post('/api/auth/login', async (req, res) => {
     try {
       const { username, password } = loginSchema.parse(req.body);
@@ -296,6 +436,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('❌ Database initialization failed:', error);
       res.status(500).json({ message: "Database initialization failed", error: error.message });
     }
+  });
+
+  // Supabase config endpoint for frontend
+  app.get('/api/config/supabase', (req, res) => {
+    res.json({
+      url: process.env.SUPABASE_URL,
+      anonKey: process.env.SUPABASE_ANON_KEY
+    });
   });
 
   const httpServer = createServer(app);
