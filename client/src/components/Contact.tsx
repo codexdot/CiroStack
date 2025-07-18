@@ -1,36 +1,33 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/hooks/use-toast";
+import { contactFormSchema, type ContactFormData } from "@shared/schema";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
   const { toast } = useToast();
+  
+  const form = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      subject: "",
+      message: "",
+    },
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields.",
-        variant: "destructive",
-      });
-      return;
-    }
-
+  const handleSubmit = (data: ContactFormData) => {
     // Simulate form submission
     toast({
       title: "Message Sent!",
@@ -38,12 +35,7 @@ export default function Contact() {
     });
     
     // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    });
+    form.reset();
   };
 
   const socialLinks = [
@@ -116,70 +108,91 @@ export default function Contact() {
           </div>
           
           <div>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">Full Name</label>
-                <input 
-                  type="text" 
-                  id="name" 
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
                   name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="portfolio-input w-full px-4 py-3 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white" 
-                  placeholder="Your name" 
-                  required 
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">Full Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Your name"
+                          className="portfolio-input w-full px-4 py-3 h-12 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white bg-transparent"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">Email Address</label>
-                <input 
-                  type="email" 
-                  id="email" 
+
+                <FormField
+                  control={form.control}
                   name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="portfolio-input w-full px-4 py-3 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white" 
-                  placeholder="your@email.com" 
-                  required 
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">Email Address</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="your@email.com"
+                          className="portfolio-input w-full px-4 py-3 h-12 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white bg-transparent"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2">Subject</label>
-                <input 
-                  type="text" 
-                  id="subject" 
+
+                <FormField
+                  control={form.control}
                   name="subject"
-                  value={formData.subject}
-                  onChange={handleInputChange}
-                  className="portfolio-input w-full px-4 py-3 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white" 
-                  placeholder="What's this about?" 
-                  required 
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">Subject</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="What's this about?"
+                          className="portfolio-input w-full px-4 py-3 h-12 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white bg-transparent"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">Message</label>
-                <textarea 
-                  id="message" 
+
+                <FormField
+                  control={form.control}
                   name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4} 
-                  className="portfolio-textarea w-full px-4 py-3 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white" 
-                  placeholder="Your message here..." 
-                  required
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">Message</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Your message here..."
+                          rows={4}
+                          className="portfolio-textarea w-full px-4 py-3 rounded-lg border border-slate-700 focus:border-[#00f0ff] focus:ring-1 focus:ring-[#00f0ff]/50 transition-all text-white bg-transparent resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </div>
-              
-              <button 
-                type="submit" 
-                className="gradient-bg text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition-all w-full"
-              >
-                Send Message
-              </button>
-            </form>
+
+                <Button
+                  type="submit"
+                  disabled={form.formState.isSubmitting}
+                  className="gradient-bg text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition-all w-full h-12"
+                >
+                  {form.formState.isSubmitting ? "Sending..." : "Send Message"}
+                </Button>
+              </form>
+            </Form>
           </div>
         </div>
       </div>
