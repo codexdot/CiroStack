@@ -57,7 +57,7 @@ export default function Contact() {
   };
 
   const socialLinks = [
-    { icon: "fab fa-github", href: "#", component: null },
+    { icon: "fab fa-github", href: "https://github.com/codexdot", component: null },
     { icon: "fab fa-linkedin-in", href: "#", component: null },
     { icon: "x-icon", href: "#", component: SiX },
     { icon: "fab fa-medium", href: "#", component: null }
