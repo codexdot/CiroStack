@@ -27,7 +27,7 @@ export default function AIMLSection() {
   ];
 
   return (
-    <section id="ai" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-slate-800/30 rounded-3xl my-12">
+    <section id="ai" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-muted/30 rounded-3xl my-12">
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
           AI & <span className="gradient-text">Machine Learning</span>
@@ -43,7 +43,7 @@ export default function AIMLSection() {
           
           <div className="space-y-8">
             {/* Model 1 */}
-            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-800">
+            <div className="bg-card rounded-xl p-6 border border-border">
               <div className="flex items-start mb-4">
                 <div className="bg-[#00f0ff]/10 p-3 rounded-lg mr-4">
                   <i className="fas fa-brain text-[#00f0ff] text-xl"></i>
@@ -72,8 +72,8 @@ export default function AIMLSection() {
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex space-x-2">
-                  <span className="text-xs bg-slate-700 text-[#00f0ff] px-2 py-1 rounded">PyTorch</span>
-                  <span className="text-xs bg-slate-700 text-[#00f0ff] px-2 py-1 rounded">ONNX</span>
+                  <span className="text-xs bg-muted text-primary px-2 py-1 rounded">PyTorch</span>
+                  <span className="text-xs bg-muted text-primary px-2 py-1 rounded">ONNX</span>
                 </div>
                 <button className="text-xs text-[#00f0ff] font-medium hover:text-[#00f0ff]/80 transition-colors">
                   View Paper
@@ -82,7 +82,7 @@ export default function AIMLSection() {
             </div>
             
             {/* Model 2 */}
-            <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-800">
+            <div className="bg-card rounded-xl p-6 border border-border">
               <div className="flex items-start mb-4">
                 <div className="bg-[#ff00f0]/10 p-3 rounded-lg mr-4">
                   <i className="fas fa-language text-[#ff00f0] text-xl"></i>
@@ -110,8 +110,8 @@ export default function AIMLSection() {
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex space-x-2">
-                  <span className="text-xs bg-slate-700 text-[#00f0ff] px-2 py-1 rounded">TensorFlow</span>
-                  <span className="text-xs bg-slate-700 text-[#00f0ff] px-2 py-1 rounded">TFLite</span>
+                  <span className="text-xs bg-muted text-primary px-2 py-1 rounded">TensorFlow</span>
+                  <span className="text-xs bg-muted text-primary px-2 py-1 rounded">TFLite</span>
                 </div>
                 <button className="text-xs text-[#00f0ff] font-medium hover:text-[#00f0ff]/80 transition-colors">
                   View Repo
@@ -126,7 +126,7 @@ export default function AIMLSection() {
           
           <div className="space-y-6">
             {contributions.map((contribution, index) => (
-              <div key={index} className="bg-slate-800/50 rounded-xl p-6 border border-slate-800">
+              <div key={index} className="bg-card rounded-xl p-6 border border-border">
                 <div className="flex items-center mb-4">
                   <img 
                     src={contribution.icon} 
@@ -142,7 +142,7 @@ export default function AIMLSection() {
                 <div className="flex items-center justify-between">
                   <div className="flex space-x-2">
                     {contribution.technologies.map((tech, techIndex) => (
-                      <span key={techIndex} className="text-xs bg-slate-700 text-[#00f0ff] px-2 py-1 rounded">
+                      <span key={techIndex} className="text-xs bg-muted text-primary px-2 py-1 rounded">
                         {tech}
                       </span>
                     ))}

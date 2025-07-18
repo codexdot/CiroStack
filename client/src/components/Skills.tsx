@@ -60,7 +60,7 @@ export default function Skills() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {skillCategories.map((category, index) => (
-          <div key={index} className="bg-slate-800/50 rounded-xl p-6 border border-slate-800">
+          <div key={index} className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center mb-6">
               <div className={`${category.bgColor} p-3 rounded-lg mr-4`}>
                 <i className={`${category.icon} ${category.iconColor} text-xl`}></i>
@@ -69,7 +69,7 @@ export default function Skills() {
             </div>
             <div className="flex flex-wrap gap-3">
               {category.skills.map((skill, skillIndex) => (
-                <span key={skillIndex} className="skill-pill text-sm bg-slate-700 text-white px-3 py-1 rounded-full">
+                <span key={skillIndex} className="skill-pill text-sm bg-muted text-muted-foreground px-3 py-1 rounded-full">
                   {skill}
                 </span>
               ))}
@@ -87,7 +87,7 @@ export default function Skills() {
         <div className="relative max-w-2xl mx-auto">
           {experience.map((job, index) => (
             <div key={index} className={`timeline-item relative pl-8 ${index !== experience.length - 1 ? 'pb-8' : ''}`}>
-              <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-800">
+              <div className="bg-card rounded-xl p-6 border border-border">
                 <div className="flex justify-between items-start mb-2">
                   <h4 className="font-bold">{job.title}</h4>
                   <span className={`text-sm px-2 py-1 rounded-full ${job.badgeColor}`}>
