@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || process.env.SESSION_SECRET || "defa
 const JWT_EXPIRES_IN = "7d";
 
 export interface AuthUser {
-  id: number;
+  id: string | number;
   username: string;
   email: string | null;
   isAdmin: boolean;
@@ -56,13 +56,18 @@ export const authenticateToken: RequestHandler = async (req: any, res, next) => 
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 
-  // Get full user data from storage
-  const fullUser = await storage.getUser(user.id);
-  if (!fullUser) {
-    return res.status(401).json({ message: "User not found" });
+  // For Supabase users (string ID), we don't need to check local storage
+  // For local users (number ID), check storage
+  if (typeof user.id === 'number') {
+    const fullUser = await storage.getUser(user.id);
+    if (!fullUser) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    req.user = fullUser;
+  } else {
+    // For Supabase users, use the token data directly
+    req.user = user;
   }
-
-  req.user = fullUser;
   next();
 };
 
