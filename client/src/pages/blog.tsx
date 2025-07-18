@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
+import { useTheme } from "@/hooks/use-theme";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -23,7 +24,7 @@ interface BlogPost {
 export default function BlogPage() {
   const [, setLocation] = useLocation();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { isDarkMode, toggleTheme } = useTheme();
   
   // Initialize scroll position management with different keys for blog list vs blog post
   const blogListKey = '/blog';
@@ -41,11 +42,6 @@ export default function BlogPage() {
   const handleBackToBlog = () => {
     setSelectedPost(null);
     // Scroll position restoration will be handled by useScrollPosition hook
-  };
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -553,10 +549,10 @@ Secure authentication requires multiple layers of protection. Follow these patte
 
   if (selectedPost) {
     return (
-      <div className="min-h-screen bg-slate-900 text-white">
+      <div className="min-h-screen bg-background text-foreground">
         <Navigation 
           isDarkMode={isDarkMode} 
-          toggleDarkMode={toggleDarkMode}
+          toggleDarkMode={toggleTheme}
           scrollToSection={scrollToSection}
         />
         
@@ -633,10 +629,10 @@ Secure authentication requires multiple layers of protection. Follow these patte
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Navigation 
         isDarkMode={isDarkMode} 
-        toggleDarkMode={toggleDarkMode}
+        toggleDarkMode={toggleTheme}
         scrollToSection={scrollToSection}
       />
       

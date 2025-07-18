@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useScrollPosition } from "@/hooks/use-scroll-position";
+import { useTheme } from "@/hooks/use-theme";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
@@ -9,15 +10,12 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 export default function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const { isDarkMode, toggleTheme } = useTheme();
   
   // Initialize scroll position management
   useScrollPosition();
 
   useEffect(() => {
-    // Set initial dark mode
-    document.documentElement.classList.add('dark');
-    
     // Add scroll animation
     const animateOnScroll = () => {
       const elements = document.querySelectorAll('.project-card, .timeline-item, .skill-pill');
@@ -41,11 +39,6 @@ export default function Home() {
     };
   }, []);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
-  };
-
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -57,10 +50,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       <Navigation 
         isDarkMode={isDarkMode} 
-        toggleDarkMode={toggleDarkMode}
+        toggleDarkMode={toggleTheme}
         scrollToSection={scrollToSection}
       />
       <Hero scrollToSection={scrollToSection} />

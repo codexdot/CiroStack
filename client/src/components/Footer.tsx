@@ -25,7 +25,7 @@ export default function Footer({ scrollToSection }: FooterProps) {
   };
 
   return (
-    <footer className="border-t border-slate-800 bg-slate-900/50">
+    <footer className="border-t border-border bg-muted/50">
       <div className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
           <div className="flex-1">
@@ -33,9 +33,9 @@ export default function Footer({ scrollToSection }: FooterProps) {
               onClick={() => handleNavClick('home')} 
               className="text-2xl font-bold gradient-text inline-block hover:opacity-80 transition-opacity"
             >
-              CIRO<span className="text-white">STACK</span>
+              CIRO<span className="text-foreground">STACK</span>
             </button>
-            <p className="text-slate-400 text-sm mt-2 max-w-md">Building intelligent mobile experiences with cutting-edge AI/ML technology.</p>
+            <p className="text-muted-foreground text-sm mt-2 max-w-md">Building intelligent mobile experiences with cutting-edge AI/ML technology.</p>
           </div>
           
           <div className="flex-1 flex flex-col items-start md:items-end">
@@ -44,14 +44,14 @@ export default function Footer({ scrollToSection }: FooterProps) {
                 <button
                   key={index}
                   onClick={() => handleNavClick(link.section)}
-                  className="text-slate-400 hover:text-[#00f0ff] transition-colors text-sm"
+                  className="text-muted-foreground hover:text-[#00f0ff] transition-colors text-sm"
                 >
                   {link.label}
                 </button>
               ))}
             </div>
             
-            <p className="text-slate-500 text-sm">© 2025 CiroStack. All rights reserved.</p>
+            <p className="text-muted-foreground text-sm">© 2025 CiroStack. All rights reserved.</p>
           </div>
         </div>
       </div>
