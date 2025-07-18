@@ -244,7 +244,7 @@
     100% { opacity: 1; transform: translateY(0); }
   }
   
-  /* Animated gradient for sun icon */
+  /* Animated gradient for sun icon - synced with gradient-text */
   @keyframes sunGradientAnimation {
     0% { stop-color: #00f0ff; }
     50% { stop-color: #ff00f0; }
@@ -252,11 +252,11 @@
   }
   
   #sunGradient stop:first-child {
-    animation: sunGradientAnimation 4s ease-in-out infinite;
+    animation: sunGradientAnimation 8s ease infinite;
   }
   
   #sunGradient stop:last-child {
-    animation: sunGradientAnimation 4s ease-in-out infinite reverse;
+    animation: sunGradientAnimation 8s ease infinite reverse;
   }
   
   .timeline-item:last-child::after {
