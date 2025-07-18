@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Smartphone, Brain, Code, Zap, Users, Star } from "lucide-react";
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { useState, useEffect } from "react";
 
 export default function Services() {
@@ -150,7 +151,7 @@ export default function Services() {
         scrollToSection={scrollToSection} 
       />
       {/* Header */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             My <span className="gradient-text">Services</span>
@@ -260,6 +261,8 @@ export default function Services() {
           </div>
         </div>
       </section>
+      
+      <Footer />
     </div>
   );
 }
