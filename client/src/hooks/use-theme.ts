@@ -16,8 +16,10 @@ export function useTheme() {
     // Apply theme to document
     if (shouldUseDark) {
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
     }
   }, []);
 
@@ -31,8 +33,10 @@ export function useTheme() {
     // Apply to document
     if (newDarkMode) {
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
     } else {
       document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
     }
   };
 

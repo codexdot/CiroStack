@@ -3,25 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(20, 14.3%, 4.1%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(20, 14.3%, 4.1%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(20, 14.3%, 4.1%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
+  --background: hsl(210, 20%, 98%);
+  --foreground: hsl(210, 40%, 8%);
+  --muted: hsl(210, 40%, 94%);
+  --muted-foreground: hsl(210, 15%, 44%);
+  --popover: hsl(210, 20%, 98%);
+  --popover-foreground: hsl(210, 40%, 8%);
+  --card: hsl(210, 20%, 98%);
+  --card-foreground: hsl(210, 40%, 8%);
+  --border: hsl(210, 25%, 87%);
+  --input: hsl(210, 25%, 87%);
   --primary: hsl(180, 100%, 50%);
-  --primary-foreground: hsl(211, 100%, 99%);
+  --primary-foreground: hsl(210, 100%, 99%);
   --secondary: hsl(300, 100%, 50%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
+  --secondary-foreground: hsl(210, 40%, 8%);
+  --accent: hsl(210, 40%, 94%);
+  --accent-foreground: hsl(210, 40%, 8%);
   --destructive: hsl(0, 84.2%, 60.2%);
   --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(20, 14.3%, 4.1%);
+  --ring: hsl(210, 40%, 8%);
   --radius: 0.5rem;
   
   /* Custom colors for portfolio */
@@ -65,9 +65,15 @@
     scroll-behavior: smooth;
   }
   
+  body {
+    background: linear-gradient(135deg, hsl(210, 20%, 98%) 0%, hsl(210, 30%, 96%) 100%);
+    min-height: 100vh;
+  }
+  
   .dark body {
-    background-color: #020617;
+    background: linear-gradient(135deg, #020617 0%, #0f1629 100%);
     color: #f8fafc;
+    min-height: 100vh;
   }
 }
 
@@ -96,6 +102,10 @@
     box-shadow: 0 20px 25px -5px rgba(0, 240, 255, 0.1), 0 10px 10px -5px rgba(255, 0, 240, 0.04);
   }
   
+  .light .card-hover:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 240, 255, 0.15), 0 10px 10px -5px rgba(255, 0, 240, 0.08);
+  }
+  
   .nav-link {
     position: relative;
   }
@@ -121,6 +131,38 @@
   
   .skill-pill {
     transition: all 0.3s ease;
+  }
+  
+  /* Light mode specific improvements */
+  .light .card-hover {
+    background: hsl(210, 40%, 97%);
+    border: 1px solid hsl(210, 20%, 90%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .light .mobile-menu {
+    background: hsl(210, 40%, 97%);
+    border-top: 1px solid hsl(210, 20%, 90%);
+  }
+  
+  /* Enhanced light mode gradient text */
+  .light .gradient-text {
+    background: linear-gradient(90deg, #0ea5e9, #d946ef);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  /* Light mode navigation improvements */
+  .light nav {
+    background: hsl(210, 40%, 97%);
+    border-bottom: 1px solid hsl(210, 20%, 90%);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Light mode section backgrounds */
+  .light section {
+    background: rgba(255, 255, 255, 0.6);
   }
   
   .skill-pill:hover {
