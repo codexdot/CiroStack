@@ -33,11 +33,9 @@ export default function Footer({ scrollToSection }: FooterProps) {
       }
       
       setLocation('/');
-      // Force scroll to top after navigation - longer delay to override useScrollPosition
+      // Smooth scroll to top after navigation - longer delay to override useScrollPosition
       setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        // Additional backup scroll
-        setTimeout(() => window.scrollTo({ top: 0, behavior: 'instant' }), 10);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 120);
     } else {
       // For homepage sections (ai, skills, contact), check if we're already on homepage
