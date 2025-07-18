@@ -8,7 +8,8 @@ export function useTheme() {
     const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    const shouldUseDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+    // Default to dark mode if no saved preference
+    const shouldUseDark = savedTheme ? savedTheme === 'dark' : (savedTheme === null ? true : prefersDark);
     
     setIsDarkMode(shouldUseDark);
     
