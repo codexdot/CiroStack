@@ -38,9 +38,10 @@ export default function Footer({ scrollToSection }: FooterProps) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 120);
     } else {
-      // For homepage sections (ai, skills, contact), check if we're already on homepage
+      // For homepage sections (ai, skills, contact), always update URL with hash
       if (location === '/') {
-        // Already on homepage, just scroll to section
+        // Already on homepage, update URL and scroll to section
+        setLocation(`/#${sectionId}`);
         scrollToSection(sectionId);
       } else {
         // Navigate to homepage with hash for section

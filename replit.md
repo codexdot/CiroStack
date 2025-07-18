@@ -28,6 +28,7 @@ Preferred communication style: Simple, everyday language.
 - Removed yellow focus outline from theme toggle button for better user experience
 - Added scroll-to-top functionality for direct page navigation (home, projects, blog pages automatically scroll to top)
 - Enhanced home page navigation with smooth scroll animation from previous position to top
+- Updated URL hash fragments for homepage sections (AI/ML, Skills, Contact) to enable direct linking and proper browser history
 
 ## System Architecture
 
