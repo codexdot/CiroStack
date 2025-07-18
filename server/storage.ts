@@ -2,12 +2,15 @@ import {
   users, 
   projects, 
   blogPosts,
+  contactSubmissions,
   type User, 
   type InsertUser,
   type Project,
   type InsertProject,
   type BlogPost,
-  type InsertBlogPost
+  type InsertBlogPost,
+  type ContactSubmission,
+  type InsertContactSubmission
 } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
@@ -36,6 +39,10 @@ export interface IStorage {
   createBlogPost(insertBlogPost: InsertBlogPost): Promise<BlogPost>;
   updateBlogPost(id: number, updateData: Partial<InsertBlogPost>): Promise<BlogPost>;
   deleteBlogPost(id: number): Promise<void>;
+  
+  // Contact submission operations
+  createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
+  getContactSubmissions(): Promise<ContactSubmission[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -137,6 +144,21 @@ export class DatabaseStorage implements IStorage {
   async deleteBlogPost(id: number): Promise<void> {
     await db.delete(blogPosts).where(eq(blogPosts.id, id));
   }
+
+  // Contact submission operations
+  async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
+    if (!db) throw new Error("Database not initialized");
+    const [contactSubmission] = await db
+      .insert(contactSubmissions)
+      .values(submission)
+      .returning();
+    return contactSubmission;
+  }
+
+  async getContactSubmissions(): Promise<ContactSubmission[]> {
+    if (!db) throw new Error("Database not initialized");
+    return await db.select().from(contactSubmissions);
+  }
 }
 
 export class MemStorage implements IStorage {
@@ -191,16 +213,20 @@ export class MemStorage implements IStorage {
 
   private projects: Map<number, Project>;
   private blogPosts: Map<number, BlogPost>;
+  private contactSubmissions: Map<number, ContactSubmission>;
   private currentProjectId: number;
   private currentBlogPostId: number;
+  private currentContactSubmissionId: number;
 
   constructor() {
     this.users = new Map();
     this.projects = new Map();
     this.blogPosts = new Map();
+    this.contactSubmissions = new Map();
     this.currentUserId = 1;
     this.currentProjectId = 1;
     this.currentBlogPostId = 1;
+    this.currentContactSubmissionId = 1;
     
     // Initialize with some sample data
     this.initializeSampleData();
@@ -366,6 +392,23 @@ export class MemStorage implements IStorage {
 
   async deleteBlogPost(id: number): Promise<void> {
     this.blogPosts.delete(id);
+  }
+
+  // Contact submission operations
+  async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
+    const id = this.currentContactSubmissionId++;
+    const now = new Date();
+    const contactSubmission: ContactSubmission = {
+      ...submission,
+      id,
+      createdAt: now,
+    };
+    this.contactSubmissions.set(id, contactSubmission);
+    return contactSubmission;
+  }
+
+  async getContactSubmissions(): Promise<ContactSubmission[]> {
+    return Array.from(this.contactSubmissions.values());
   }
 }
 
