@@ -68,7 +68,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
 
   return (
     <nav className="fixed w-full z-50 bg-background/90 backdrop-blur-md border-b border-border">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center">
             <button 
@@ -78,7 +78,7 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
               <img 
                 src="/logotrans.png" 
                 alt="CiroStack Logo" 
-                className="w-16 h-16 object-contain"
+                className="w-16 h-16 object-contain -ml-2"
               />
               <span>CIRO<span className="text-foreground">STACK</span></span>
             </button>
