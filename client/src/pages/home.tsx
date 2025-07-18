@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useScrollPosition } from "@/hooks/use-scroll-position";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
@@ -9,6 +10,9 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  
+  // Initialize scroll position management
+  useScrollPosition();
 
   useEffect(() => {
     // Set initial dark mode

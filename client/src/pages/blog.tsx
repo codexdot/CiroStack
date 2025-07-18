@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
+import { useScrollPosition } from "@/hooks/use-scroll-position";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -23,6 +24,24 @@ export default function BlogPage() {
   const [, setLocation] = useLocation();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  
+  // Initialize scroll position management with different keys for blog list vs blog post
+  const blogListKey = '/blog';
+  const blogPostKey = selectedPost ? `/blog/post/${selectedPost.id}` : '/blog';
+  const { saveScrollPosition, restoreScrollPosition } = useScrollPosition(blogPostKey);
+
+  // Handle blog post selection with scroll management
+  const handlePostSelect = (post: BlogPost) => {
+    saveScrollPosition(); // Save current position before navigating
+    setSelectedPost(post);
+    // Scroll to top will be handled by useScrollPosition hook
+  };
+
+  // Handle back to blog with scroll restoration
+  const handleBackToBlog = () => {
+    setSelectedPost(null);
+    // Scroll position restoration will be handled by useScrollPosition hook
+  };
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -544,7 +563,7 @@ Secure authentication requires multiple layers of protection. Follow these patte
         <main className="pt-20">
           <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
             <button
-              onClick={() => setSelectedPost(null)}
+              onClick={handleBackToBlog}
               className="inline-flex items-center text-[#00f0ff] hover:text-[#00f0ff]/80 transition-colors mb-8"
             >
               <i className="fas fa-arrow-left mr-2"></i>
@@ -635,7 +654,7 @@ Secure authentication requires multiple layers of protection. Follow these patte
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
               <article key={post.id} className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-800 card-hover cursor-pointer transition-all duration-300 hover:bg-slate-800/70 hover:border-slate-700 hover:scale-105"
-                onClick={() => setSelectedPost(post)}
+                onClick={() => handlePostSelect(post)}
               >
                 <div className="relative">
                   <img 
