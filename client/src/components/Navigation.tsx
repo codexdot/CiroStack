@@ -73,9 +73,14 @@ export default function Navigation({ isDarkMode, toggleDarkMode, scrollToSection
           <div className="flex items-center">
             <button 
               onClick={() => handleNavClick('home')} 
-              className="text-2xl font-bold gradient-text hover:opacity-80 transition-opacity"
+              className="flex items-center space-x-3 text-2xl font-bold gradient-text hover:opacity-80 transition-opacity"
             >
-              CIRO<span className="text-foreground">STACK</span>
+              <img 
+                src="/logosm.png" 
+                alt="CiroStack Logo" 
+                className="w-8 h-8 object-contain"
+              />
+              <span>CIRO<span className="text-foreground">STACK</span></span>
             </button>
           </div>
           
