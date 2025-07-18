@@ -34,7 +34,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
-        <WhatsAppButton phoneNumber="1234567890" message="Hello! I'm interested in your AI/ML mobile development services." />
+        <WhatsAppButton phoneNumber="2349117292574" message="Hello! I'm interested in your AI/ML mobile development services." />
       </TooltipProvider>
     </QueryClientProvider>
   );
